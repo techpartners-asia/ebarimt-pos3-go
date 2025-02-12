@@ -1,13 +1,15 @@
 package pos3
 
-import "github.com/techpartners-asia/ebarimt-pos3-go/structs"
+import (
+	"github.com/techpartners-asia/ebarimt-pos3-go/structs"
+)
 
 type pos3 struct {
 	posEndpoint string
 	apiKey      string
-	posNo       string
-	merchantTin string
 	token       *structs.TokenResponse
+	merchanTin  string
+	posNo       string
 }
 
 type ConnectionInput struct {
@@ -21,12 +23,15 @@ func New(input ConnectionInput) Pos3 {
 	return &pos3{
 		apiKey:      input.ApiKey,
 		posEndpoint: input.PosEndpoint,
+		merchanTin:  input.MerchantTin,
 		posNo:       input.PosNo,
-		merchantTin: input.MerchantTin,
 	}
 }
 
 type Pos3 interface {
+	// Get Inputs
+	GetMerchantTin() string
+	GetPosNo() string
 	// Цахим төлбөрийн баримт
 	GetInfo(regNo string) (structs.GetInfoResponse, error)
 	GetTinInfo(regNo string) (structs.GetTinInfoResponse, error)

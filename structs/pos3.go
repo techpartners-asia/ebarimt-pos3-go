@@ -86,12 +86,12 @@ type (
 
 	// Борлуулалтын задаргааны мэдээлэл татах сервисийн хүсэлт
 	GetSalesTotalDataRequest struct {
-		Year       string    `json:"year"`       // Задаргаа авч буй баримтын он
-		Month      string    `json:"month"`      // Задаргаа авч буй баримтын сар
-		Day        string    `json:"day"`        // Задаргаа авч буй баримтын өдөр /Заавал биш/
+		Year       string              `json:"year"`       // Задаргаа авч буй баримтын он
+		Month      string              `json:"month"`      // Задаргаа авч буй баримтын сар
+		Day        string              `json:"day"`        // Задаргаа авч буй баримтын өдөр /Заавал биш/
 		Status     constants.SalesData `json:"status"`     // Задаргаа авч буй баримтын төрөл
-		StartCount int       `json:"startCount"` // Тухайн баримтын эхлэх тоо
-		EndCount   int       `json:"endCount"`   // Тухайн баримтын дуусах тоо
+		StartCount int                 `json:"startCount"` // Тухайн баримтын эхлэх тоо
+		EndCount   int                 `json:"endCount"`   // Тухайн баримтын дуусах тоо
 	}
 
 	// Борлуулалтын задаргааны мэдээлэл татах сервисийн хариу
@@ -245,86 +245,86 @@ type (
 
 	// Баримтын хүсэлт
 	ReceiptRequest struct {
-		TotalAmount  float64     `json:"totalAmount"`  // Багц баримтын гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
-		TotalVat     float64     `json:"totalVat"`     // Багц баримтын НӨАТ-н нийт дүн
-		TotalCityTax float64     `json:"totalCityTax"` // Багц баримтын НХАТ-н нийт дүн
-		BranchNo     string      `json:"branchNo"`     // Салбарын дугаар
-		DistrictCode string      `json:"districtCode"` // Баримт хэвлэсэн орон нутгийн код /4 оронтой бүхэл тоо/
-		MerchantTin  string      `json:"merchantTin"`  // Багц баримт олгогчийн ТТД (11 эсвэл 14 оронтой бүхэл тоо )
-		PosNo        string      `json:"posNo"`        // Тухайн байгууллагын дотоод кассын дугаар
-		CustomerTin  string      `json:"customerTin"`  // Худалдан авагчийн ТТД
-		ConsumerNo   string      `json:"consumerNo"`   // Худалдан авагч иргэний ebarimt-н бүртгэлийн дугаар
+		TotalAmount  float64               `json:"totalAmount"`  // Багц баримтын гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
+		TotalVat     float64               `json:"totalVat"`     // Багц баримтын НӨАТ-н нийт дүн
+		TotalCityTax float64               `json:"totalCityTax"` // Багц баримтын НХАТ-н нийт дүн
+		BranchNo     string                `json:"branchNo"`     // Салбарын дугаар
+		DistrictCode string                `json:"districtCode"` // Баримт хэвлэсэн орон нутгийн код /4 оронтой бүхэл тоо/
+		MerchantTin  string                `json:"merchantTin"`  // Багц баримт олгогчийн ТТД (11 эсвэл 14 оронтой бүхэл тоо )
+		PosNo        string                `json:"posNo"`        // Тухайн байгууллагын дотоод кассын дугаар
+		CustomerTin  string                `json:"customerTin"`  // Худалдан авагчийн ТТД
+		ConsumerNo   string                `json:"consumerNo"`   // Худалдан авагч иргэний ebarimt-н бүртгэлийн дугаар
 		Type         constants.ReceiptType `json:"type"`         // Баримтын төрөл
-		InActiveID   string      `json:"inActiveId"`   // Засварлах баримтын ДДТД (33 орон бүхий тоон утга)
-		InvoiceID    string      `json:"invoiceId"`    // Тухайн төлбөрийн баримтын харгалзах нэхэмжлэхийн ДДТД (33 орон бүхий тоон утга)
-		ReportMonth  interface{} `json:"reportMonth"`  // Баримт харьяалагдах тайлант сар ("yyyy-MM-dd" форматтай огноо)
-		Data         interface{} `json:"data"`         // Багц төлбөрийн баримтын нэмэлт өгөгдөл JSON
-		Receipts     []Receipt   `json:"receipts"`     // Дэд төлбөрийн баримтууд
-		Payments     []Payment   `json:"payments"`     // Төлбөрийн хэлбэр
+		InActiveID   string                `json:"inActiveId"`   // Засварлах баримтын ДДТД (33 орон бүхий тоон утга)
+		InvoiceID    string                `json:"invoiceId"`    // Тухайн төлбөрийн баримтын харгалзах нэхэмжлэхийн ДДТД (33 орон бүхий тоон утга)
+		ReportMonth  interface{}           `json:"reportMonth"`  // Баримт харьяалагдах тайлант сар ("yyyy-MM-dd" форматтай огноо)
+		Data         interface{}           `json:"data"`         // Багц төлбөрийн баримтын нэмэлт өгөгдөл JSON
+		Receipts     []Receipt             `json:"receipts"`     // Дэд төлбөрийн баримтууд
+		Payments     []Payment             `json:"payments"`     // Төлбөрийн хэлбэр
 	}
 
 	// Дэд төлбөрийн баримтын мэдээлэл
 	Receipt struct {
-		ID            string      `json:"id"`            // Дэд төлбөрийн баримтын ДДТД
-		TotalAmount   float64     `json:"totalAmount"`   // Дэд төлбөрийн баримтын гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
-		TotalVat      float64     `json:"totalVat"`      // Дэд төлбөрийн баримтын НӨАТ-н нийт дүн
-		TotalCityTax  float64     `json:"totalCityTax"`  // Дэд төлбөрийн баримтын НХАТ-н нийт дүн
-		TaxType       constants.TaxType     `json:"taxType"`       // Татварын төрөл
-		MerchantTin   string      `json:"merchantTin"`   // Борлуулагчийн ТТД
-		BankAccountNo string      `json:"bankAccountNo"` // Нэхэмжлэхийн банкны дансны дугаар
-		Data          interface{} `json:"data"`          // Дэд төлбөрийн баримтын нэмэлт өгөгдөл.
-		Items         []Item      `json:"items"`         // Борлуулсан бүтээгдэхүүн, үйлчилгээний жагсаалт
+		ID            string            `json:"id"`            // Дэд төлбөрийн баримтын ДДТД
+		TotalAmount   float64           `json:"totalAmount"`   // Дэд төлбөрийн баримтын гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
+		TotalVat      float64           `json:"totalVat"`      // Дэд төлбөрийн баримтын НӨАТ-н нийт дүн
+		TotalCityTax  float64           `json:"totalCityTax"`  // Дэд төлбөрийн баримтын НХАТ-н нийт дүн
+		TaxType       constants.TaxType `json:"taxType"`       // Татварын төрөл
+		MerchantTin   string            `json:"merchantTin"`   // Борлуулагчийн ТТД
+		BankAccountNo string            `json:"bankAccountNo"` // Нэхэмжлэхийн банкны дансны дугаар
+		Data          interface{}       `json:"data"`          // Дэд төлбөрийн баримтын нэмэлт өгөгдөл.
+		Items         []Item            `json:"items"`         // Борлуулсан бүтээгдэхүүн, үйлчилгээний жагсаалт
 	}
 
 	// Борлуулсан бүтээгдэхүүн, үйлчилгээний мэдээлэл
 	Item struct {
-		Name               string      `json:"name"`               // Бүтээгдэхүүн, үйлчилгээний нэр
-		BarCode            string      `json:"barCode"`            // Бүтээгдэхүүний зураасан код
+		Name               string                `json:"name"`               // Бүтээгдэхүүн, үйлчилгээний нэр
+		BarCode            string                `json:"barCode"`            // Бүтээгдэхүүний зураасан код
 		BarCodeType        constants.BarcodeType `json:"barCodeType"`        // Зураасан кодын төрөл
-		ClassificationCode string      `json:"classificationCode"` // Бүтээгдэхүүн, үйлчилгээний ангиллын код (7 оронтой бүхэл тоо)
-		TaxProductCode     string      `json:"taxProductCode"`     // taxType талбарын утга нь VAT_FREE, VAT_ZERO үед татварын харгалзах 3 оронтой тоон кодыг оруулана.
-		MeasureUnit        string      `json:"measureUnit"`        // Хэмжих нэгж
-		Qty                float64     `json:"qty"`                // Борлуулсан тоо, хэмжээ
-		UnitPrice          float64     `json:"unitPrice"`          // Нэгж үнэ (Бүх төрлийн татвар шингэсэн дүн)
-		TotalBonus         float64     `json:"totalBonus"`
-		TotalVat           float64     `json:"totalVat"`     // Бүтээгдэхүүн, үйлчилгээний НӨАТ-н нийт дүн
-		TotalCityTax       float64     `json:"totalCityTax"` // Бүтээгдэхүүн, үйлчилгээний НХАТ-н нийт дүн
-		TotalAmount        float64     `json:"totalAmount"`  // Бүтээгдэхүүн, үйлчилгээний гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
-		Data               interface{} `json:"data"`         // Бүтээгдэхүүн, үйлчилгээний нэмэлт өгөгдөл
+		ClassificationCode string                `json:"classificationCode"` // Бүтээгдэхүүн, үйлчилгээний ангиллын код (7 оронтой бүхэл тоо)
+		TaxProductCode     string                `json:"taxProductCode"`     // taxType талбарын утга нь VAT_FREE, VAT_ZERO үед татварын харгалзах 3 оронтой тоон кодыг оруулана.
+		MeasureUnit        string                `json:"measureUnit"`        // Хэмжих нэгж
+		Qty                float64               `json:"qty"`                // Борлуулсан тоо, хэмжээ
+		UnitPrice          float64               `json:"unitPrice"`          // Нэгж үнэ (Бүх төрлийн татвар шингэсэн дүн)
+		TotalBonus         float64               `json:"totalBonus"`
+		TotalVat           float64               `json:"totalVat"`     // Бүтээгдэхүүн, үйлчилгээний НӨАТ-н нийт дүн
+		TotalCityTax       float64               `json:"totalCityTax"` // Бүтээгдэхүүн, үйлчилгээний НХАТ-н нийт дүн
+		TotalAmount        float64               `json:"totalAmount"`  // Бүтээгдэхүүн, үйлчилгээний гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
+		Data               interface{}           `json:"data"`         // Бүтээгдэхүүн, үйлчилгээний нэмэлт өгөгдөл
 	}
 
 	// Төлбөрийн хэлбэрийн мэдээлэл
 	Payment struct {
 		Code         constants.PaymentCode   `json:"code"`         // Төлбөрийн хэлбэрийн код
-		ExchangeCode string        `json:"exchangeCode"` // Төлбөр хийж гүйцэтгэх гуравдагч системийн код
+		ExchangeCode string                  `json:"exchangeCode"` // Төлбөр хийж гүйцэтгэх гуравдагч системийн код
 		Status       constants.PaymentStatus `json:"status"`       // Төлбөрийн хэлбэрийн төлөв
-		PaidAmount   float64       `json:"paidAmount"`   // Нийт төлсөн дүн
-		Data         interface{}   `json:"data"`         // Төлбөрийн нэмэлт өгөгдөл
+		PaidAmount   float64                 `json:"paidAmount"`   // Нийт төлсөн дүн
+		Data         interface{}             `json:"data"`         // Төлбөрийн нэмэлт өгөгдөл
 	}
 
 	// Баримтын хариу
 	ReceiptResponse struct {
-		ID           string      `json:"id"`           // Багц төлбөрийн баримтын ДДТД
-		Version      string      `json:"version"`      // Version
-		TotalAmount  float64     `json:"totalAmount"`  // Багц баримтын гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
-		TotalVat     float64     `json:"totalVat"`     // Багц баримтын НӨАТ-н нийт дүн
-		TotalCityTax float64     `json:"totalCityTax"` // Багц баримтын НХАТ-н нийт дүн
-		BranchNo     string      `json:"branchNo"`     // Салбарын дугаар
-		DistrictCode string      `json:"districtCode"` // Баримт хэвлэсэн орон нутгийн код /4 оронтой бүхэл тоо/
-		MerchantTIN  string      `json:"merchantTin"`  // Багц баримт олгогчийн ТТД (11 эсвэл 14 оронтой бүхэл тоо )
-		PosNo        string      `json:"posNo"`        // Тухайн байгууллагын дотоод кассын дугаар
-		CustomerTIN  string      `json:"customerTin"`  // Худалдан авагчийн ТТД
-		ConsumerNo   string      `json:"consumerNo"`   // Худалдан авагч иргэний ebarimt-н бүртгэлийн дугаар
+		ID           string                `json:"id"`           // Багц төлбөрийн баримтын ДДТД
+		Version      string                `json:"version"`      // Version
+		TotalAmount  float64               `json:"totalAmount"`  // Багц баримтын гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
+		TotalVat     float64               `json:"totalVat"`     // Багц баримтын НӨАТ-н нийт дүн
+		TotalCityTax float64               `json:"totalCityTax"` // Багц баримтын НХАТ-н нийт дүн
+		BranchNo     string                `json:"branchNo"`     // Салбарын дугаар
+		DistrictCode string                `json:"districtCode"` // Баримт хэвлэсэн орон нутгийн код /4 оронтой бүхэл тоо/
+		MerchantTIN  string                `json:"merchantTin"`  // Багц баримт олгогчийн ТТД (11 эсвэл 14 оронтой бүхэл тоо )
+		PosNo        string                `json:"posNo"`        // Тухайн байгууллагын дотоод кассын дугаар
+		CustomerTIN  string                `json:"customerTin"`  // Худалдан авагчийн ТТД
+		ConsumerNo   string                `json:"consumerNo"`   // Худалдан авагч иргэний ebarimt-н бүртгэлийн дугаар
 		Type         constants.ReceiptType `json:"type"`         // Баримтын төрөл
-		InvoiceID    string      `json:"invoiceId"`    // Тухайн төлбөрийн баримтын харгалзах нэхэмжлэхийн ДДТД (33 орон бүхий тоон утга)
-		Receipts     []Receipt   `json:"receipts"`     // Дэд төлбөрийн баримтууд
-		PosID        float64     `json:"posId"`        // PosAPI-н системийн дугаар
+		InvoiceID    string                `json:"invoiceId"`    // Тухайн төлбөрийн баримтын харгалзах нэхэмжлэхийн ДДТД (33 орон бүхий тоон утга)
+		Receipts     []Receipt             `json:"receipts"`     // Дэд төлбөрийн баримтууд
+		PosID        float64               `json:"posId"`        // PosAPI-н системийн дугаар
 		Status       constants.PosStatus   `json:"status"`       // Баримтын төлөв
-		Message      string      `json:"message"`      // Тайлбар утга
-		QrData       string      `json:"qrData"`       // QR Code-н утга
-		Lottery      string      `json:"lottery"`      // Сугалааны дугаар
-		Date         string      `json:"date"`         // Баримт хэвэлсэн огноо ("yyyy-MM-dd HH:mm:ss" форматтай огноо)
-		Easy         bool        `json:"easy"`         // Хялбар бүртгэл хийгдсэн эсэх /true - хялбар бүртгэлд бүртгэсэн /false - хялбар бүртгэлд бүртгээгүй
+		Message      string                `json:"message"`      // Тайлбар утга
+		QrData       string                `json:"qrData"`       // QR Code-н утга
+		Lottery      string                `json:"lottery"`      // Сугалааны дугаар
+		Date         string                `json:"date"`         // Баримт хэвэлсэн огноо ("yyyy-MM-dd HH:mm:ss" форматтай огноо)
+		Easy         bool                  `json:"easy"`         // Хялбар бүртгэл хийгдсэн эсэх /true - хялбар бүртгэлд бүртгэсэн /false - хялбар бүртгэлд бүртгээгүй
 	}
 
 	// Дэд төлбөрийн баримтын мэдээлэл
