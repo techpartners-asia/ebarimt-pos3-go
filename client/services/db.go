@@ -37,6 +37,7 @@ type (
 		QrData       string                `gorm:"qr_data" json:"qr_data"`
 		Lottery      string                `gorm:"lottery" json:"lottery"`
 		Date         string                `gorm:"date" json:"date"`
+		IsRefund     bool                  `gorm:"is_refund" json:"is_refund"`
 		Receipts     []EbarimtReceipt      `gorm:"foreignKey:EbarimtID" json:"receipts"`
 	}
 
@@ -51,6 +52,7 @@ type (
 		MerchantTin   string               `gorm:"merchant_tin" json:"merchant_tin"`
 		BankAccountNo string               `gorm:"bank_account_no" json:"bank_account_no"`
 		Items         []EbarimtReceiptItem `gorm:"foreignKey:ReceiptID" json:"items"`
+		IsRefund      bool                 `gorm:"is_refund" json:"is_refund"`
 	}
 
 	EbarimtReceiptItem struct {
