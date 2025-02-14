@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
 	"github.com/techpartners-asia/ebarimt-pos3-go/structs"
 	"gorm.io/gorm"
 )
@@ -29,7 +28,7 @@ type (
 		PosNo        string                `gorm:"pos_no" json:"pos_no"`
 		CustomerTin  string                `gorm:"customer_tin" json:"customer_tin"`
 		ConsumerNo   string                `gorm:"consumer_no" json:"consumer_no"`
-		Type         constants.ReceiptType `gorm:"type" json:"type"`
+		Type         string `gorm:"type:varchar(20);column:receipt_type" json:"type"`
 		BillID       string                `gorm:"bill_id" json:"bill_id"`
 		InvoiceID    string                `gorm:"invoice_id" json:"invoice_id"`
 		PosID        float64               `gorm:"pos_id" json:"pos_id"`
@@ -48,7 +47,7 @@ type (
 		TotalAmount   float64              `gorm:"total_amount" json:"total_amount"`
 		TotalVat      float64              `gorm:"total_vat" json:"total_vat"`
 		TotalCityTax  float64              `gorm:"total_city_tax" json:"total_city_tax"`
-		TaxType       constants.TaxType    `gorm:"tax_type" json:"tax_type"`
+		TaxType       string    `gorm:"tax_type" json:"tax_type"`
 		MerchantTin   string               `gorm:"merchant_tin" json:"merchant_tin"`
 		BankAccountNo string               `gorm:"bank_account_no" json:"bank_account_no"`
 		Items         []EbarimtReceiptItem `gorm:"foreignKey:ReceiptID" json:"items"`
@@ -59,7 +58,7 @@ type (
 		Base
 		Name               string                `gorm:"name" json:"name"`
 		BarCode            string                `gorm:"bar_code" json:"bar_code"`
-		BarCodeType        constants.BarcodeType `gorm:"bar_code_type" json:"bar_code_type"`
+		BarCodeType       string `gorm:"bar_code_type" json:"bar_code_type"`
 		ClassificationCode string                `gorm:"classification_code" json:"classification_code"`
 		MeasureUnit        string                `gorm:"measure_unit" json:"measure_unit"`
 		TaxProductCode     string                `gorm:"tax_product_code" json:"tax_product_code"`
@@ -87,7 +86,7 @@ func SaveEbarimt(db *gorm.DB, res *structs.ReceiptResponse) {
 		TotalVat:     res.TotalAmount,
 		TotalCityTax: res.TotalCityTax,
 		CustomerTin:  res.CustomerTIN,
-		Type:         res.Type,
+		Type:         string(res.Type),
 		BranchNo:     res.BranchNo,
 		DistrictCode: res.DistrictCode,
 		BillID:       res.ID,
@@ -111,7 +110,7 @@ func SaveEbarimt(db *gorm.DB, res *structs.ReceiptResponse) {
 			TotalAmount:   receipt.TotalAmount,
 			TotalVat:      receipt.TotalVat,
 			TotalCityTax:  receipt.TotalCityTax,
-			TaxType:       receipt.TaxType,
+			TaxType:      string( receipt.TaxType),
 			MerchantTin:   receipt.MerchantTin,
 			BankAccountNo: receipt.BankAccountNo,
 		}
@@ -125,7 +124,7 @@ func SaveEbarimt(db *gorm.DB, res *structs.ReceiptResponse) {
 			itemInstance := EbarimtReceiptItem{
 				Name:               item.Name,
 				BarCode:            item.BarCode,
-				BarCodeType:        item.BarCodeType,
+				BarCodeType:        string(item.BarCodeType),
 				ClassificationCode: item.ClassificationCode,
 				MeasureUnit:        item.MeasureUnit,
 				TaxProductCode:     item.TaxProductCode,
