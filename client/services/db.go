@@ -69,7 +69,7 @@ type (
 		TotalCityTax       float64               `gorm:"total_city_tax" json:"total_city_tax"`
 		TotalBonus         float64               `gorm:"total_bonus" json:"total_bonus"`
 		ReceiptID          int64                 `gorm:"receipt_id" json:"receipt_id"`
-		Receipt            *EbarimtReceipt       `gorm:"foreignKey:EbarimtID" json:"receipt"`
+		Receipt            *EbarimtReceipt       `gorm:"foreignKey:ReceiptID" json:"receipt"`
 	}
 )
 
