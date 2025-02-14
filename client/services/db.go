@@ -80,7 +80,7 @@ func Register(db *gorm.DB) {
 }
 
 func SaveEbarimt(db *gorm.DB, res *structs.ReceiptResponse) {
-
+	// Ebarimt хадгалах
 	instance := Ebarimt{
 		TotalAmount:  res.TotalAmount,
 		TotalVat:     res.TotalAmount,
@@ -110,7 +110,7 @@ func SaveEbarimt(db *gorm.DB, res *structs.ReceiptResponse) {
 			TotalAmount:   receipt.TotalAmount,
 			TotalVat:      receipt.TotalVat,
 			TotalCityTax:  receipt.TotalCityTax,
-			TaxType:      string( receipt.TaxType),
+			TaxType:       string(receipt.TaxType),
 			MerchantTin:   receipt.MerchantTin,
 			BankAccountNo: receipt.BankAccountNo,
 		}
@@ -119,6 +119,9 @@ func SaveEbarimt(db *gorm.DB, res *structs.ReceiptResponse) {
 			fmt.Printf("Can't Save Ebarimt Receipt Data %v\n", err)
 			return
 		}
+
+		// 🛠 ID-г хэвлэх, оноогдсон эсэхийг шалгах
+		fmt.Printf("Saved Receipt ID: %d\n", receiptInstance.ID)
 
 		for _, item := range receipt.Items {
 			itemInstance := EbarimtReceiptItem{
@@ -134,7 +137,7 @@ func SaveEbarimt(db *gorm.DB, res *structs.ReceiptResponse) {
 				TotalVat:           item.TotalVat,
 				TotalCityTax:       item.TotalCityTax,
 				TotalBonus:         item.TotalBonus,
-				
+				ReceiptID:          receiptInstance.ID,
 			}
 
 			if err := db.Create(&itemInstance).Error; err != nil {
