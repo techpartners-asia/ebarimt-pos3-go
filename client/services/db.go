@@ -134,6 +134,7 @@ func SaveEbarimt(db *gorm.DB, res *structs.ReceiptResponse) {
 				TotalVat:           item.TotalVat,
 				TotalCityTax:       item.TotalCityTax,
 				TotalBonus:         item.TotalBonus,
+				ReceiptID:          receiptInstance.ID,
 			}
 
 			if err := db.Create(&itemInstance).Error; err != nil {
