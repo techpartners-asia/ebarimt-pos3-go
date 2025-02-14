@@ -97,18 +97,16 @@ func (e *EbarimtClient) Create(input models.CreateInputModel) (interface{}, erro
 
 	fmt.Println("Ebarimt Other Tax Type RESPONSE", res)
 
-	go func(e *EbarimtClient, res structs.ReceiptResponse) {
-		// * NOTE * : Step - 5 : Save Ebarimt to DB
-		if e.DB != nil {
-			ebarimt3SdkServices.SaveEbarimt(e.DB, &res)
-		}
+	// * NOTE * : Step - 5 : Save Ebarimt to DB
+	if e.DB != nil {
+		ebarimt3SdkServices.SaveEbarimt(e.DB, &res)
+	}
 
-		if e.MailHost != "" && e.MailPort != 0 {
-			// * NOTE * : Step - 6 : Send Ebarimt to Mail
-			// TODO : Send Ebarimt to Mail
-		}
+	if e.MailHost != "" && e.MailPort != 0 {
+		// * NOTE * : Step - 6 : Send Ebarimt to Mail
+		// TODO : Send Ebarimt to Mail
+	}
 
-	}(e, res)
 
 	return nil, nil
 }
