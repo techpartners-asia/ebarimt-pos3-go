@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
 	"github.com/techpartners-asia/ebarimt-pos3-go/structs"
-	"gorm.io/gorm"
 )
 
 type (
@@ -13,7 +12,7 @@ type (
 		DistrictCode string                 `json:"district_code"`
 		Payments     []structs.Payment      `json:"payments"` // Хоосон явуулбал , Payments нь автоматаар Card төлбөр болгон
 		Items        []CreateItemInputModel `json:"items"`
-		DB           *gorm.DB               // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
+		// DB           *gorm.DB               // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
 	}
 
 	CreateItemInputModel struct {

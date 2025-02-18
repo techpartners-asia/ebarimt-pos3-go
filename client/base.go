@@ -27,7 +27,7 @@ type (
 		MerchantTin string
 
 		// * NOTE * : Optional & Integration To the Third Party
-		DB       *gorm.DB
+		DB       *gorm.DB // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
 		MailHost string
 		MailPort int
 	}
@@ -52,7 +52,7 @@ func New(input Input) *EbarimtClient {
 	}
 }
 
-func (e *EbarimtClient) Create(input models.CreateInputModel) (interface{}, error) {
+func (e *EbarimtClient) Create(input models.CreateInputModel) (*structs.ReceiptResponse, error) {
 
 	// * NOTE * : Build Request For invoice and product
 	request := e.buildRequest(input)
@@ -97,18 +97,15 @@ func (e *EbarimtClient) Create(input models.CreateInputModel) (interface{}, erro
 
 	fmt.Println("Ebarimt Other Tax Type RESPONSE", res)
 
-	go func(e *EbarimtClient, res structs.ReceiptResponse) {
-		// * NOTE * : Step - 5 : Save Ebarimt to DB
-		if e.DB != nil {
-			ebarimt3SdkServices.SaveEbarimt(e.DB, &res)
-		}
+	// * NOTE * : Step - 5 : Save Ebarimt to DB
+	if e.DB != nil {
+		ebarimt3SdkServices.SaveEbarimt(e.DB, &res)
+	}
 
-		if e.MailHost != "" && e.MailPort != 0 {
-			// * NOTE * : Step - 6 : Send Ebarimt to Mail
-			// TODO : Send Ebarimt to Mail
-		}
+	if e.MailHost != "" && e.MailPort != 0 {
+		// * NOTE * : Step - 6 : Send Ebarimt to Mail
+		// TODO : Send Ebarimt to Mail
+	}
 
-	}(e, res)
-
-	return nil, nil
+	return &res, nil
 }

@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 )
 
@@ -52,23 +51,24 @@ func Float64ToString(f float64) string {
 }
 
 func NumberPrecision(value float64) float64 {
-	return math.Round(value*100) / 100
+	strValue := fmt.Sprintf("%.2f", value)
+	truncatedValue, _ := strconv.ParseFloat(strValue, 64)
+	return truncatedValue
+	// return float64(int(value*100)) / 100
 }
 
 func GetVat(value float64) float64 {
-	return (value / 11) * 100 / 100
+	return NumberPrecision((value / 11) * 100 / 100)
 }
 
 func GetVatWithCityTax(value float64) float64 {
-	return (value / 112) * 1000 / 100
+	return ((value / 112) * 1000 / 100)
 }
 
 func GetCityTax(value float64) float64 {
-
-	//  198  = city tax - 2% , vat 10%
-	return ((value / 112) * 2) * 100 / 100
+	return (((value / 112) * 2) * 100 / 100)
 }
 
 func GetCityTaxWithoutVat(value float64) float64 {
-	return ((value / 102) * 2) * 100 / 100
+	return (((value / 102) * 2) * 100 / 100)
 }
