@@ -1,6 +1,6 @@
 package tests
 
-import ebarimt3 "github.com/techpartners-asia/ebarimt-pos3-go/client"
+import ebarimt3 "github.com/techpartners-asia/ebarimt-pos3-go"
 
 const (
 	OrgCode      = ""

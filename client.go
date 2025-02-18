@@ -1,10 +1,10 @@
-package ebarimt3Sdk
+package ebarimtv3
 
 import (
 	"fmt"
 
-	models "github.com/techpartners-asia/ebarimt-pos3-go/client/models"
-	ebarimt3SdkServices "github.com/techpartners-asia/ebarimt-pos3-go/client/services"
+	ebarimt3SdkServices "github.com/techpartners-asia/ebarimt-pos3-go/services"
+	models "github.com/techpartners-asia/ebarimt-pos3-go/structs"
 
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
 	"github.com/techpartners-asia/ebarimt-pos3-go/pos3"

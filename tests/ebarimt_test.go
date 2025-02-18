@@ -5,12 +5,12 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/techpartners-asia/ebarimt-pos3-go/client/models"
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
+	"github.com/techpartners-asia/ebarimt-pos3-go/structs"
 	"github.com/techpartners-asia/ebarimt-pos3-go/utils"
 )
 
-var items = []models.CreateItemInputModel{{
+var items = []structs.CreateItemInputModel{{
 	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
 	TaxType:            constants.TAX_VAT_ZERO,
 	ClassificationCode: "2441030",
@@ -114,7 +114,7 @@ func TestVats(t *testing.T) {
 
 	sdk := NewSdk()
 
-	res, err := sdk.Create(models.CreateInputModel{
+	res, err := sdk.Create(structs.CreateInputModel{
 		OrgCode:      OrgCode,
 		BranchNo:     BranchNo,
 		DistrictCode: DistrictCode,

@@ -1,15 +1,14 @@
-package ebarimt3Sdk
+package ebarimtv3
 
 import (
 	"fmt"
 
-	"github.com/techpartners-asia/ebarimt-pos3-go/client/models"
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
 	"github.com/techpartners-asia/ebarimt-pos3-go/structs"
 	"github.com/techpartners-asia/ebarimt-pos3-go/utils"
 )
 
-func (e *EbarimtClient) buildRequest(input models.CreateInputModel) structs.ReceiptRequest {
+func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.ReceiptRequest {
 	ebarimtRequest := structs.ReceiptRequest{
 		BranchNo: fmt.Sprintf("%v", input.BranchNo),
 		DistrictCode: func() string {
@@ -41,7 +40,7 @@ func (e *EbarimtClient) buildRequest(input models.CreateInputModel) structs.Rece
 }
 
 // * NOTE * : Step - 2 : Categorying by Tax Type
-func (e *EbarimtClient) buildReceiptItemMap(items []models.CreateItemInputModel) map[constants.TaxType]structs.Receipt {
+func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel) map[constants.TaxType]structs.Receipt {
 
 	receiptItems := make(map[constants.TaxType]structs.Receipt, len(items))
 
