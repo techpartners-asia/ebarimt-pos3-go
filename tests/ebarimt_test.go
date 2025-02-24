@@ -17,7 +17,7 @@ var items = []structs.CreateItemInputModel{{
 	Qty:                10,
 	IsCityTax:          true,
 	MeasureUnit:        "unit",
-	TotalAmount:        50,
+	TotalAmount:        2000,
 	TaxProductCode:     "447",
 }, {
 	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
@@ -26,7 +26,7 @@ var items = []structs.CreateItemInputModel{{
 	Qty:                2,
 	IsCityTax:          true,
 	MeasureUnit:        "unit",
-	TotalAmount:        100,
+	TotalAmount:        4550,
 	TaxProductCode:     "447",
 }, {
 	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
@@ -35,7 +35,7 @@ var items = []structs.CreateItemInputModel{{
 	Qty:                1,
 	IsCityTax:          false,
 	MeasureUnit:        "unit",
-	TotalAmount:        20,
+	TotalAmount:        1350,
 	TaxProductCode:     "447",
 }, {
 	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
@@ -44,7 +44,7 @@ var items = []structs.CreateItemInputModel{{
 	Qty:                22,
 	IsCityTax:          true,
 	MeasureUnit:        "unit",
-	TotalAmount:        400,
+	TotalAmount:        22000,
 	TaxProductCode:     "447",
 }, {
 	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
@@ -53,7 +53,7 @@ var items = []structs.CreateItemInputModel{{
 	Qty:                1,
 	IsCityTax:          true,
 	MeasureUnit:        "unit",
-	TotalAmount:        20,
+	TotalAmount:        2300,
 	TaxProductCode:     "447",
 }, {
 	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
@@ -62,7 +62,7 @@ var items = []structs.CreateItemInputModel{{
 	Qty:                3,
 	IsCityTax:          true,
 	MeasureUnit:        "unit",
-	TotalAmount:        44,
+	TotalAmount:        4500,
 	TaxProductCode:     "447",
 },
 	{
@@ -72,7 +72,7 @@ var items = []structs.CreateItemInputModel{{
 		Qty:                2,
 		IsCityTax:          true,
 		MeasureUnit:        "unit",
-		TotalAmount:        109,
+		TotalAmount:        4800,
 		TaxProductCode:     "447",
 	},
 	{
@@ -82,7 +82,7 @@ var items = []structs.CreateItemInputModel{{
 		Qty:                10,
 		IsCityTax:          true,
 		MeasureUnit:        "unit",
-		TotalAmount:        55,
+		TotalAmount:        3700,
 		TaxProductCode:     "447",
 	},
 }
@@ -123,5 +123,28 @@ func TestVats(t *testing.T) {
 
 	assert.Nil(err, fmt.Sprintf("Ebarimt Error : %v ", res.Message))
 
+	if err != nil {
+		return
+	}
+
+	// for _, receipt := range res.Receipts {
+	// 	assert.Equal(utils.NumberPrecision(receipt.TotalAmount), receipt.TotalAmount, "TotalAmount Precision ")
+	// 	assert.Equal(utils.NumberPrecision(receipt.TotalVat), receipt.TotalVat, "TotalVat Precision")
+	// 	assert.Equal(utils.NumberPrecision(receipt.TotalCityTax), receipt.TotalCityTax, "TotalCityTax Precision")
+
+	// 	for _, item := range receipt.Items {
+	// 		assert.Equal(utils.NumberPrecision(item.TotalAmount), item.TotalAmount, "Receipt Item TotalAmount Precision")
+	// 		assert.Equal(utils.NumberPrecision(item.TotalVat), item.TotalVat, "Receipt Item TotalVat Precision")
+	// 		assert.Equal(utils.NumberPrecision(item.TotalCityTax), item.TotalCityTax, "Receipt Item TotalCityTax Precision")
+	// 		assert.Equal(utils.NumberPrecision(item.UnitPrice), item.UnitPrice, "Receipt Item UnitPrice Precision")
+	// 	}
+	// }
+
 	assert.Equal(constants.POS_STATUS_SUCCESS, res.Status, "Ebarimt Error : %v", res.Message)
+}
+
+func TestItems(t *testing.T) {
+	assert := assert.New(t)
+
+	assert.Equal(0.35, utils.NumberPrecision(0.35714285714285715), "Number Precision")
 }

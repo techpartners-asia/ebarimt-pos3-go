@@ -123,10 +123,6 @@ func (e *EbarimtClient) buildReceipt(request *structs.ReceiptRequest, items map[
 		receipts = append(receipts, item)
 	}
 
-	request.TotalAmount = utils.NumberPrecision(request.TotalAmount)
-	request.TotalVat = utils.NumberPrecision(request.TotalVat)
-	request.TotalCityTax = utils.NumberPrecision(request.TotalCityTax)
-
 	request.Receipts = receipts
 
 	request.Payments = []structs.Payment{

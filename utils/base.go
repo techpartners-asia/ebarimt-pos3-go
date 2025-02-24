@@ -51,24 +51,23 @@ func Float64ToString(f float64) string {
 }
 
 func NumberPrecision(value float64) float64 {
-	strValue := fmt.Sprintf("%.2f", value)
-	truncatedValue, _ := strconv.ParseFloat(strValue, 64)
-	return truncatedValue
+	return float64(int(value*100)) / 100
 	// return float64(int(value*100)) / 100
 }
 
 func GetVat(value float64) float64 {
-	return NumberPrecision((value / 11) * 100 / 100)
+	return (value / 110) * 100000 / 10000
 }
 
 func GetVatWithCityTax(value float64) float64 {
-	return ((value / 112) * 1000 / 100)
+	step1 := (value / 112) * 100000 / 10000
+	return step1
 }
 
 func GetCityTax(value float64) float64 {
-	return (((value / 112) * 2) * 100 / 100)
+	return (value / 112) * 100000 / 50000
 }
 
 func GetCityTaxWithoutVat(value float64) float64 {
-	return (((value / 102) * 2) * 100 / 100)
+	return (value / 102) * 100000 / 50000
 }
