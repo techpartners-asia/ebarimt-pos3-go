@@ -32,6 +32,9 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 			}
 			return ""
 		}(),
+		TotalAmount:  input.TotalAmount,
+		TotalVat:     input.TotalVat,
+		TotalCityTax: input.TotalCityTax,
 		ConsumerNo:  "",
 		ReportMonth: nil,
 	}
@@ -108,18 +111,10 @@ func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel
 // * NOTE * : Step - 3 Format Receipts like grouping [{tax_type , items : []}]
 func (e *EbarimtClient) buildReceipt(request *structs.ReceiptRequest, items map[constants.TaxType]structs.Receipt) {
 
-	request.TotalAmount = 0
-	request.TotalVat = 0
-	request.TotalCityTax = 0
 
 	receipts := make([]structs.Receipt, 0, len(items))
 
 	for _, item := range items {
-		request.TotalAmount += item.TotalAmount
-		request.TotalVat += item.TotalVat
-		request.TotalCityTax += item.TotalCityTax
-
-		item.MerchantTin = e.GetMerchantTin()
 		receipts = append(receipts, item)
 	}
 
@@ -135,5 +130,4 @@ func (e *EbarimtClient) buildReceipt(request *structs.ReceiptRequest, items map[
 		},
 	}
 
-	return
 }
