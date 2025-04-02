@@ -28,4 +28,10 @@ type (
 		TotalAmount        float64           `json:"total_amount"`
 		TaxProductCode     string            `json:"tax_product_code"`
 	}
+
+	CalculateTotalsOutputModel struct {
+		TotalVat     float64 `json:"total_vat"`
+		TotalCityTax float64 `json:"total_city_tax"`
+		TotalAmount  float64 `json:"total_amount"`
+	}
 )

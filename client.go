@@ -5,6 +5,7 @@ import (
 
 	ebarimt3SdkServices "github.com/techpartners-asia/ebarimt-pos3-go/services"
 	models "github.com/techpartners-asia/ebarimt-pos3-go/structs"
+	"github.com/techpartners-asia/ebarimt-pos3-go/utils"
 
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
 	"github.com/techpartners-asia/ebarimt-pos3-go/pos3"
@@ -108,4 +109,41 @@ func (e *EbarimtClient) Create(input models.CreateInputModel) (*structs.ReceiptR
 	}
 
 	return &res, nil
+}
+
+func (e *EbarimtClient) CalculateTotals(items []models.CreateItemInputModel) (*models.CalculateTotalsOutputModel, error) {
+
+	var output models.CalculateTotalsOutputModel
+
+	for _, item := range items {
+		output.TotalVat += func() float64 {
+			if item.TaxType == constants.TAX_VAT_ABLE {
+				if item.IsCityTax {
+					return utils.GetVatWithCityTax(item.TotalAmount)
+				}
+				return utils.GetVat(item.TotalAmount)
+			}
+			return 0
+		}()
+
+		output.TotalAmount += item.TotalAmount
+
+		output.TotalCityTax += func() float64 {
+
+			if item.TaxType == constants.TAX_NO_VAT {
+				return 0
+			}
+
+			if item.IsCityTax {
+				if item.TaxType == constants.TAX_VAT_ABLE {
+					return utils.GetCityTax(item.TotalAmount)
+				}
+				return utils.GetCityTaxWithoutVat(item.TotalAmount)
+			}
+
+			return 0
+		}()
+	}
+
+	return &output, nil
 }
