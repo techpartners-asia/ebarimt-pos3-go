@@ -59,7 +59,10 @@ func (e *EbarimtClient) Create(input models.CreateInputModel) (*structs.ReceiptR
 	request := e.buildRequest(input)
 
 	// * NOTE * : Build RECEIPT ITEMS By Tax Type as Map
-	receiptsItems := e.buildReceiptItemMap(input.Items)
+	receiptsItems, err := e.buildReceiptItemMap(input.Items)
+	if err != nil {
+		return nil, err
+	}
 
 	// * NOTE * : If has No VAT Items, Send First
 	if len(receiptsItems) > 0 && len(receiptsItems[constants.TAX_NO_VAT].Items) > 0 {

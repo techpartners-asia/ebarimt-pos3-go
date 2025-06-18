@@ -43,7 +43,12 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 }
 
 // * NOTE * : Step - 2 : Categorying by Tax Type
-func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel) map[constants.TaxType]structs.Receipt {
+func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel) (map[constants.TaxType]structs.Receipt, error) {
+
+	info, err := e.GetInfo(e.GetMerchantTin())
+	if err != nil {
+		return nil, err
+	}
 
 	receiptItems := make(map[constants.TaxType]structs.Receipt, len(items))
 
@@ -64,18 +69,23 @@ func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel
 			BarCodeType:        constants.BARCODE_UNDEFINED,
 			ClassificationCode: item.ClassificationCode,
 			TotalVat: func() float64 {
+				if !info.Data.VatPayer {
+					return 0
+				}
+
 				if item.TaxType == constants.TAX_VAT_ABLE {
 					if item.IsCityTax {
 						return utils.GetVatWithCityTax(item.TotalAmount)
 					}
 					return utils.GetVat(item.TotalAmount)
 				}
+
 				return 0
 			}(),
 			UnitPrice:   utils.NumberPrecision(item.TotalAmount / float64(item.Qty)),
 			TotalAmount: item.TotalAmount,
 			TotalCityTax: func() float64 {
-				if item.TaxType == constants.TAX_NO_VAT {
+				if item.TaxType != constants.TAX_VAT_ABLE {
 					return 0
 				}
 
@@ -109,18 +119,18 @@ func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel
 		receiptItems[productTaxType] = receipt
 	}
 
-	return receiptItems
+	return receiptItems, nil
 }
 
 // * NOTE * : Step - 3 Format Receipts like grouping [{tax_type , items : []}]
 func (e *EbarimtClient) buildReceipt(request *structs.ReceiptRequest, items map[constants.TaxType]structs.Receipt) {
-
 	receipts := make([]structs.Receipt, 0, len(items))
 	totalAmount := 0.0
 	totalVat := 0.0
 	totalCityTax := 0.0
 
 	for _, item := range items {
+
 		receipts = append(receipts, item)
 		totalAmount += item.TotalAmount
 		totalVat += item.TotalVat
@@ -130,9 +140,7 @@ func (e *EbarimtClient) buildReceipt(request *structs.ReceiptRequest, items map[
 	request.TotalAmount = totalAmount
 	request.TotalVat = totalVat
 	request.TotalCityTax = totalCityTax
-
 	request.Receipts = receipts
-
 	request.Payments = []structs.Payment{
 		{
 			Code:   constants.PAYMENT_CARD,
