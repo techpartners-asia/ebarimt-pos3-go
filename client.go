@@ -18,9 +18,15 @@ type (
 		pos3.Pos3
 
 		// * NOTE * : Optional & Integration To the Third Party
-		DB       *gorm.DB
-		MailHost string
-		MailPort int
+		DB               *gorm.DB
+		MailHost         string
+		MailPort         string
+		MailTo           string
+		MailFrom         string
+		MailPassword     string
+		StorageEndpoint  string
+		StorageAccessKey string
+		StorageSecretKey string
 	}
 	Input struct {
 		Endpoint    string
@@ -28,9 +34,15 @@ type (
 		MerchantTin string
 
 		// * NOTE * : Optional & Integration To the Third Party
-		DB       *gorm.DB // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
-		MailHost string
-		MailPort int
+		DB               *gorm.DB // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
+		MailHost         string
+		MailPort         string
+		MailTo           string
+		MailFrom         string
+		MailPassword     string
+		StorageEndpoint  string
+		StorageAccessKey string
+		StorageSecretKey string
 	}
 )
 
@@ -50,6 +62,12 @@ func New(input Input) *EbarimtClient {
 		input.DB,
 		input.MailHost,
 		input.MailPort,
+		input.MailTo,
+		input.MailFrom,
+		input.MailPassword,
+		input.StorageEndpoint,
+		input.StorageAccessKey,
+		input.StorageSecretKey,
 	}
 }
 
@@ -106,9 +124,22 @@ func (e *EbarimtClient) Create(input models.CreateInputModel) (*structs.ReceiptR
 		ebarimt3SdkServices.SaveEbarimt(e.DB, &res)
 	}
 
-	if e.MailHost != "" && e.MailPort != 0 {
+	if e.MailHost != "" && e.MailPort != "" && e.MailTo != "" && e.MailFrom != "" && e.MailPassword != "" {
 		// * NOTE * : Step - 6 : Send Ebarimt to Mail
 		// TODO : Send Ebarimt to Mail
+		ebarimt3SdkServices.SendMail(
+			ebarimt3SdkServices.EmailInput{
+				Email:            e.MailTo,
+				From:             e.MailFrom,
+				Password:         e.MailPassword,
+				SmtpHost:         e.MailHost,
+				SmtpPort:         e.MailPort,
+				StorageEndpoint:  e.StorageEndpoint,
+				StorageAccessKey: e.StorageAccessKey,
+				StorageSecretKey: e.StorageSecretKey,
+				Response:         res,
+			},
+		)
 	}
 
 	return &res, nil

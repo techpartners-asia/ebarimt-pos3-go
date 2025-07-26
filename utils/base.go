@@ -71,3 +71,7 @@ func GetCityTax(value float64) float64 {
 func GetCityTaxWithoutVat(value float64) float64 {
 	return (value / 102) * 100000 / 50000
 }
+
+func FloatToStr(value float64) string {
+	return strconv.FormatFloat(value, 'f', -1, 64)
+}

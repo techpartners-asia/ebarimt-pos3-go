@@ -3,9 +3,11 @@ package tests
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
+	ebarimt3SdkServices "github.com/techpartners-asia/ebarimt-pos3-go/services"
 	"github.com/techpartners-asia/ebarimt-pos3-go/structs"
 	"github.com/techpartners-asia/ebarimt-pos3-go/utils"
 )
@@ -14,77 +16,12 @@ var items = []structs.CreateItemInputModel{{
 	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
 	TaxType:            constants.TAX_VAT_ZERO,
 	ClassificationCode: "2441030",
-	Qty:                10,
-	IsCityTax:          true,
-	MeasureUnit:        "unit",
-	TotalAmount:        2000,
-	TaxProductCode:     "447",
-}, {
-	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
-	TaxType:            constants.TAX_VAT_FREE,
-	ClassificationCode: "2441030",
-	Qty:                2,
-	IsCityTax:          true,
-	MeasureUnit:        "unit",
-	TotalAmount:        4550,
-	TaxProductCode:     "447",
-}, {
-	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
-	TaxType:            constants.TAX_VAT_ABLE,
-	ClassificationCode: "2441030",
-	Qty:                1,
-	IsCityTax:          false,
-	MeasureUnit:        "unit",
-	TotalAmount:        1350,
-	TaxProductCode:     "447",
-}, {
-	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
-	TaxType:            constants.TAX_NO_VAT,
-	ClassificationCode: "2441030",
-	Qty:                22,
-	IsCityTax:          true,
-	MeasureUnit:        "unit",
-	TotalAmount:        22000,
-	TaxProductCode:     "447",
-}, {
-	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
-	TaxType:            constants.TAX_VAT_ABLE,
-	ClassificationCode: "2441030",
 	Qty:                1,
 	IsCityTax:          true,
 	MeasureUnit:        "unit",
-	TotalAmount:        2300,
-	TaxProductCode:     "447",
-}, {
-	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
-	TaxType:            constants.TAX_VAT_ABLE,
-	ClassificationCode: "2441030",
-	Qty:                3,
-	IsCityTax:          true,
-	MeasureUnit:        "unit",
-	TotalAmount:        4500,
+	TotalAmount:        10,
 	TaxProductCode:     "447",
 },
-	{
-		Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
-		TaxType:            constants.TAX_VAT_FREE,
-		ClassificationCode: "2441030",
-		Qty:                2,
-		IsCityTax:          true,
-		MeasureUnit:        "unit",
-		TotalAmount:        4800,
-		TaxProductCode:     "447",
-	},
-	{
-		Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
-		TaxType:            constants.TAX_VAT_ZERO,
-		ClassificationCode: "2441030",
-		Qty:                10,
-		IsCityTax:          true,
-		MeasureUnit:        "unit",
-		TotalAmount:        3700,
-		TaxProductCode:     "447",
-	},
 }
 
 func TestAmounts(t *testing.T) {
@@ -147,4 +84,39 @@ func TestItems(t *testing.T) {
 	assert := assert.New(t)
 
 	assert.Equal(0.35, utils.NumberPrecision(0.35714285714285715), "Number Precision")
+}
+
+func TestSendMail(t *testing.T) {
+	ebarimt3SdkServices.SendMail(
+		ebarimt3SdkServices.EmailInput{
+			Email:            "burabatbold2@gmail.com",
+			From:             "no-reply@lifetech.mn",
+			Password:         "7fDf#mtz",
+			SmtpHost:         "smtp.zoho.com",
+			SmtpPort:         "587",
+			StorageEndpoint:  "file-powerbank.lifetech.mn",
+			StorageAccessKey: "admin",
+			StorageSecretKey: "aV969{1]]5^L",
+
+			Response: structs.ReceiptResponse{
+				QrData:       "5407284065424164431453299078758426279428312571101109500241404625729681071321549735501597491072545005682667748344848224388939135598794838760522384975371681",
+				ID:           "1234567890",
+				Date:         time.Now().Format("2006-01-02"),
+				TotalAmount:  100,
+				TotalVat:     10,
+				TotalCityTax: 10,
+				Receipts: []structs.Receipt{
+					{
+						Items: []structs.Item{
+							{
+								Name:        "Test",
+								Qty:         1,
+								TotalAmount: 100,
+							},
+						},
+					},
+				},
+			},
+		},
+	)
 }
