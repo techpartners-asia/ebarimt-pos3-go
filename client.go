@@ -21,7 +21,6 @@ type (
 		DB               *gorm.DB
 		MailHost         string
 		MailPort         string
-		MailTo           string
 		MailFrom         string
 		MailPassword     string
 		StorageEndpoint  string
@@ -37,7 +36,6 @@ type (
 		DB               *gorm.DB // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
 		MailHost         string
 		MailPort         string
-		MailTo           string
 		MailFrom         string
 		MailPassword     string
 		StorageEndpoint  string
@@ -62,7 +60,6 @@ func New(input Input) *EbarimtClient {
 		input.DB,
 		input.MailHost,
 		input.MailPort,
-		input.MailTo,
 		input.MailFrom,
 		input.MailPassword,
 		input.StorageEndpoint,
@@ -124,12 +121,12 @@ func (e *EbarimtClient) Create(input models.CreateInputModel) (*structs.ReceiptR
 		ebarimt3SdkServices.SaveEbarimt(e.DB, &res)
 	}
 
-	if e.MailHost != "" && e.MailPort != "" && e.MailTo != "" && e.MailFrom != "" && e.MailPassword != "" {
+	if e.MailHost != "" && e.MailPort != "" && e.MailFrom != "" && e.MailPassword != "" && input.MailTo != "" {
 		// * NOTE * : Step - 6 : Send Ebarimt to Mail
 		// TODO : Send Ebarimt to Mail
 		ebarimt3SdkServices.SendMail(
 			ebarimt3SdkServices.EmailInput{
-				Email:            e.MailTo,
+				Email:            input.MailTo,
 				From:             e.MailFrom,
 				Password:         e.MailPassword,
 				SmtpHost:         e.MailHost,

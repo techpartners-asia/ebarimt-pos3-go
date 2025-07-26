@@ -6,6 +6,7 @@ import (
 
 type (
 	CreateInputModel struct {
+		MailTo       string                 `json:"mail_to"`
 		TotalAmount  float64                `json:"total_amount"`
 		TotalVat     float64                `json:"total_vat"`
 		TotalCityTax float64                `json:"total_city_tax"`
