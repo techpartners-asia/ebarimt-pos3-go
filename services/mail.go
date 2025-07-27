@@ -89,7 +89,11 @@ func SendMail(input EmailInput) error {
 		}
 	}
 
-	t, _ := template.ParseFiles("../files/mail/ebarimt.html")
+	t, err := template.ParseFiles("files/mail/ebarimt.html")
+	if err != nil {
+		fmt.Println("Ebarimt mail template error: ", err)
+		return err
+	}
 
 	var body bytes.Buffer
 
