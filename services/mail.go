@@ -7,6 +7,8 @@ import (
 	"html/template"
 	"math"
 	"net/smtp"
+	"os"
+	"path/filepath"
 
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
 	models "github.com/techpartners-asia/ebarimt-pos3-go/structs"
@@ -87,12 +89,12 @@ func SendMail(input EmailInput) error {
 	// 	}
 	// }
 
-	// wd, err := os.Getwd()
-	// if err != nil {
-	// 	return err
-	// }
+	wd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
 
-	templatePath := "../files/mail/ebarimt.html"
+	templatePath := filepath.Join(wd, "files/mail/ebarimt.html")
 
 	t, err := template.ParseFiles(templatePath)
 	if err != nil {
