@@ -7,8 +7,6 @@ import (
 	"html/template"
 	"math"
 	"net/smtp"
-	"os"
-	"path/filepath"
 
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
 	models "github.com/techpartners-asia/ebarimt-pos3-go/structs"
@@ -16,16 +14,14 @@ import (
 )
 
 type EmailInput struct {
-	Email            string                 `json:"email"`
-	Subtitle         string                 `json:"subtitle"`
-	From             string                 `json:"from"`
-	Password         string                 `json:"password"`
-	SmtpHost         string                 `json:"smtp_host"`
-	SmtpPort         string                 `json:"smtp_port"`
-	Response         models.ReceiptResponse `json:"response"`
-	StorageEndpoint  string                 `json:"storage_endpoint"`
-	StorageAccessKey string                 `json:"storage_access_key"`
-	StorageSecretKey string                 `json:"storage_secret_key"`
+	Email    string                 `json:"email"`
+	Subtitle string                 `json:"subtitle"`
+	From     string                 `json:"from"`
+	User     string                 `json:"user"`
+	Password string                 `json:"password"`
+	SmtpHost string                 `json:"smtp_host"`
+	SmtpPort string                 `json:"smtp_port"`
+	Response models.ReceiptResponse `json:"response"`
 }
 
 type SendEmailBody struct {
@@ -51,10 +47,10 @@ func SendMail(input EmailInput) error {
 	if input.Response.ID == "" {
 		return errors.New("response id is required")
 	}
-	imageUrl, err := NewStorageService(input.StorageEndpoint, input.StorageAccessKey, input.StorageSecretKey).AttachImage(&input.Response)
-	if err != nil {
-		return err
-	}
+	// imageUrl, err := NewStorageService(input.StorageEndpoint, input.StorageAccessKey, input.StorageSecretKey).AttachImage(&input.Response)
+	// if err != nil {
+	// 	return err
+	// }
 
 	emailBody := SendEmailBody{
 		Date:         input.Response.Date,
@@ -63,7 +59,7 @@ func SendMail(input EmailInput) error {
 		TotalCityTax: utils.FloatToStr(math.Round(input.Response.TotalCityTax*100) / 100),
 		BillID:       input.Response.ID,
 		Lottery:      input.Response.Lottery,
-		Image:        imageUrl,
+		Image:        "cid:qr-code",
 	}
 
 	if input.Response.Type == constants.RECEIPT_B2B_RECEIPT {
@@ -73,30 +69,30 @@ func SendMail(input EmailInput) error {
 		emailBody.BillType = "Хувь хүн"
 	}
 
-	for _, receipt := range input.Response.Receipts {
-		for _, item := range receipt.Items {
-			emailBody.Items = append(emailBody.Items, struct {
-				Name         string `json:"name"`
-				Qty          string `json:"qty"`
-				TotalAmount  string `json:"total_amount"`
-				TotalVat     string `json:"total_vat"`
-				TotalCityTax string `json:"total_city_tax"`
-			}{
-				Name:         item.Name,
-				Qty:          utils.FloatToStr(item.Qty),
-				TotalAmount:  utils.FloatToStr(math.Round(item.TotalAmount*100) / 100),
-				TotalVat:     utils.FloatToStr(math.Round(item.TotalVat*100) / 100),
-				TotalCityTax: utils.FloatToStr(math.Round(item.TotalCityTax*100) / 100),
-			})
-		}
-	}
+	// for _, receipt := range input.Response.Receipts {
+	// 	for _, item := range receipt.Items {
+	// 		emailBody.Items = append(emailBody.Items, struct {
+	// 			Name         string `json:"name"`
+	// 			Qty          string `json:"qty"`
+	// 			TotalAmount  string `json:"total_amount"`
+	// 			TotalVat     string `json:"total_vat"`
+	// 			TotalCityTax string `json:"total_city_tax"`
+	// 		}{
+	// 			Name:         item.Name,
+	// 			Qty:          utils.FloatToStr(item.Qty),
+	// 			TotalAmount:  utils.FloatToStr(math.Round(item.TotalAmount*100) / 100),
+	// 			TotalVat:     utils.FloatToStr(math.Round(item.TotalVat*100) / 100),
+	// 			TotalCityTax: utils.FloatToStr(math.Round(item.TotalCityTax*100) / 100),
+	// 		})
+	// 	}
+	// }
 
-	wd, err := os.Getwd()
-	if err != nil {
-		return err
-	}
+	// wd, err := os.Getwd()
+	// if err != nil {
+	// 	return err
+	// }
 
-	templatePath := filepath.Join(wd, "files/mail/ebarimt.html")
+	templatePath := "../files/mail/ebarimt.html"
 
 	t, err := template.ParseFiles(templatePath)
 	if err != nil {
@@ -104,17 +100,35 @@ func SendMail(input EmailInput) error {
 		return err
 	}
 
-	var body bytes.Buffer
+	var htmlBuf bytes.Buffer
+	if err := t.Execute(&htmlBuf, emailBody); err != nil {
+		return err
+	}
 
-	mimeHeaders := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
+	htmlBody, boundary, err := utils.GenerateInlineQR(htmlBuf.String(), input.Response.QrData)
+	if err != nil {
+		return err
+	}
 
-	body.Write([]byte(fmt.Sprintf("Subject: %s \n%s\n\n", "Төлбөрийн баримт", mimeHeaders)))
+	var fullEmail bytes.Buffer
+	fullEmail.WriteString(fmt.Sprintf("From: %s\r\n", input.From))
+	fullEmail.WriteString(fmt.Sprintf("To: %s\r\n", input.Email))
+	fullEmail.WriteString("Subject: Төлбөрийн баримт\r\n")
+	fullEmail.WriteString("MIME-Version: 1.0\r\n")
+	fullEmail.WriteString(fmt.Sprintf("Content-Type: multipart/related; boundary=%s\r\n", boundary))
+	fullEmail.WriteString("\r\n")
 
-	t.Execute(&body, emailBody)
-	auth := smtp.PlainAuth("", input.From, input.Password, input.SmtpHost)
+	fullEmail.WriteString(fmt.Sprintf("--%s\r\n", boundary))
+	fullEmail.WriteString("Content-Type: text/html; charset=UTF-8\r\n")
+	fullEmail.WriteString("Content-Transfer-Encoding: 7bit\r\n\r\n")
+	fullEmail.Write(htmlBuf.Bytes()) // original HTML template content
+	fullEmail.WriteString("\r\n")
+	fullEmail.Write(htmlBody) // or attach image parts here
+
+	auth := smtp.PlainAuth("", input.User, input.Password, input.SmtpHost)
 
 	// Sending email.
-	err = smtp.SendMail(input.SmtpHost+":"+input.SmtpPort, auth, input.From, []string{input.Email}, body.Bytes())
+	err = smtp.SendMail(input.SmtpHost+":"+input.SmtpPort, auth, input.From, []string{input.Email}, fullEmail.Bytes())
 	if err != nil {
 		return err
 	}

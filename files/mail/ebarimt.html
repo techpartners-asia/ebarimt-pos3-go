@@ -1,243 +1,154 @@
 <!-- template.html -->
 <!DOCTYPE html>
-<table width="100%" border="0" cellspacing="0" bgcolor="#eeeeee">
-  <tbody>
-    <tr>
-      <td></td>
-      <td width="500" align="center">
-        <table
-          width="100%"
-          border="0"
-          cellspacing="10"
-          cellpadding="0"
-          style="
-            font-family: Roboto, Arial, Helvetica, sans-serif;
-            font-size: 15px;
-            line-height: 18px;
-            overflow: auto;
-          "
-        >
-          <tbody>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      @media only screen and (max-width: 600px) {
+        .container {
+          width: 100% !important;
+        }
+        .qr-code {
+          text-align: center;
+        }
+        img {
+          max-width: 100% !important;
+          height: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    "
+  >
+    <table
+      width="100%"
+      border="0"
+      cellspacing="0"
+      cellpadding="0"
+      bgcolor="#f5f5f5"
+    >
+      <tr>
+        <td align="center">
+          <table
+            class="container"
+            width="500"
+            cellspacing="0"
+            cellpadding="0"
+            bgcolor="#ffffff"
+            style="max-width: 500px; width: 100%; overflow: hidden"
+          >
+            <!-- HEADER -->
             <tr>
-              <td
-                align="left"
-                valign="top"
-                bgcolor="#ffffff"
-                style="overflow: auto; border-radius: 5px"
-              >
-                <table
-                  width="100%"
-                  border="0"
-                  cellspacing="0"
-                  cellpadding="0"
-                  style="border-collapse: collapse; line-height: 18px"
-                >
-                  <tbody>
-                    <tr>
-                      <td style="padding: 10px 20px" valign="top">
-                        <table
-                          width="100%"
-                          cellspacing="0"
-                          cellpadding="10"
-                          style="
-                            border-spacing: 0;
-                            border-collapse: collapse;
-                            width: 100%;
-                            font-size: 14px;
-                            color: #555;
-                            table-layout: fixed;
-                          "
-                        >
-                          <tbody>
-                            <tr>
-                              <td valign="top">Огноо</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{.Date}}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        align="center"
-                        valign="center"
-                        width="100%"
-                        style="border-top: 1px solid #eee; padding-top: 20px"
-                      >
-                        <img
-                          src="https://ci4.googleusercontent.com/proxy/afY5IXW32GQ2uspaHffJ-7IpQ6iwQPRESpYjSd23xaNvSOsWuf5VUy1gs7Jf-ij29LuFWcZ5_-E=s0-d-e1-ft#https://www.unitel.mn/img/ebarimt.png"
-                          height="70"
-                          width="70"
-                          class="CToWUd"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 10px 20px" valign="top">
-                        <table
-                          width="100%"
-                          cellspacing="0"
-                          cellpadding="10"
-                          style="
-                            border-spacing: 0;
-                            border-collapse: collapse;
-                            width: 100%;
-                            font-size: 14px;
-                            color: #555;
-                            table-layout: fixed;
-                          "
-                        >
-                          <tbody>
-                            <tr>
-                              <td valign="top">Төрөл</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{.BillType}}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td valign="top">ДДТД</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{.BillID}}
-                              </td>
-                            </tr>
-                            {{if .Type}}
-                            <tr>
-                              <td valign="top">Байгууллага</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{.ConsumerNo}}
-                              </td>
-                            </tr>
-                            {{end}}
-
-                            <tr>
-                              <td valign="top">Нийт НӨАТ</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{.TotalVat}}₮
-                              </td>
-                            </tr>
-                            <tr>
-                              <td valign="top">Нийт НХАТ</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{.TotalCityTax}}₮
-                              </td>
-                            </tr>
-                            <tr style="font-weight: 600">
-                              <td valign="top">Сугалааны дугаар</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{.Lottery}}
-                              </td>
-                            </tr>
-                            <tr style="font-weight: 600">
-                              <td valign="top">Төлсөн дүн</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{.TotalAmount}}₮
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-
-                        <table
-                          width="100%"
-                          cellspacing="0"
-                          cellpadding="10"
-                          style="
-                            border-spacing: 0;
-                            border-collapse: collapse;
-                            width: 100%;
-                            font-size: 14px;
-                            color: #555;
-                            table-layout: fixed;
-                          "
-                        >
-                          <tbody>
-                            <tr style="font-weight: 600">
-                              <td valign="top">Нэр</td>
-                              <td valign="top">НӨАТ</td>
-                              <td valign="top">НХАТ</td>
-                              <td valign="top">Тоо ширхэг</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                Нийт дүн
-                              </td>
-                            </tr>
-
-                            {{range $val := .Items}}
-                            <tr>
-                              <td valign="top">{{$val.Name}}</td>
-                              <td valign="top">{{$val.TotalVat}}</td>
-                              <td valign="top">{{$val.TotalCityTax}}</td>
-                              <td valign="top">{{$val.Qty}}</td>
-                              <td
-                                valign="top"
-                                align="right"
-                                style="word-wrap: break-word"
-                              >
-                                {{$val.TotalAmount}}
-                              </td>
-                            </tr>
-                            {{end}}
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td align="center">
-                        <img
-                          src="{{.Image}}"
-                          width="150"
-                          height="150"
-                          class="CToWUd"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td height="20"></td>
-                    </tr>
-                  </tbody>
+              <td bgcolor="#273E81" style="padding: 20px; color: #fff">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td align="left">
+                      <img
+                        src="logo.png"
+                        alt="Logo"
+                        height="32"
+                        style="vertical-align: middle"
+                      />
+                    </td>
+                    <td align="right" style="font-size: 18px; font-weight: 600">
+                      ГҮЙЛГЭЭНИЙ МЭДЭЭЛЭЛ
+                    </td>
+                  </tr>
                 </table>
               </td>
             </tr>
-          </tbody>
-        </table>
-      </td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+
+            <!-- BODY CONTENT -->
+            <tr>
+              <td style="padding: 20px; font-size: 15px; color: #333">
+                <table
+                  width="100%"
+                  cellpadding="10"
+                  cellspacing="0"
+                  style="
+                    border-collapse: collapse;
+                    font-size: 15px;
+                    color: #333;
+                  "
+                >
+                  <tr>
+                    <td style="font-weight: bold; padding: 10px 0px">Төрөл:</td>
+                    <td style="text-align: start">{{.BillType}}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold; padding: 10px 0px">
+                      Нийт дүн:
+                    </td>
+                    <td style="text-align: start">{{.TotalAmount}}₮</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold; padding: 10px 0px">
+                      НӨАТ дүн:
+                    </td>
+                    <td style="text-align: start">{{.TotalVat}}₮</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold; padding: 10px 0px">
+                      Сугалааны код:
+                    </td>
+                    <td style="text-align: start">{{.Lottery}}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold; padding: 10px 0px">ДДТД:</td>
+                    <td style="text-align: start">{{.BillID}}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold; padding: 10px 0px">
+                      Баримт хэвлэсэн огноо:
+                    </td>
+                    <td style="text-align: start">{{.Date}}</td>
+                  </tr>
+                </table>
+
+                <div class="qr-code" style="margin: 20px 0">
+                  <img src="cid:qr-code" width="150" height="150" />
+                </div>
+
+                <p
+                  style="
+                    text-align: center;
+                    font-weight: 600;
+                    font-size: 16px;
+                    margin-top: 20px;
+                    margin-bottom: 0px;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid #eaecf0;
+                  "
+                >
+                  БАЯРЛАЛАА
+                </p>
+              </td>
+            </tr>
+
+            <!-- FOOTER -->
+            <tr>
+              <td
+                style="
+                  padding: 15px 20px;
+                  font-size: 13px;
+                  color: #666;
+                  text-align: center;
+                "
+              >
+                <strong>Сануулга:</strong> Имэйл TINO-оос автоматаар илгээгдсэн
+                учир хариу бичих шаардлагагүй шүү.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
