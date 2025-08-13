@@ -18,14 +18,12 @@ type (
 		pos3.Pos3
 
 		// * NOTE * : Optional & Integration To the Third Party
-		DB               *gorm.DB
-		MailHost         string
-		MailPort         string
-		MailFrom         string
-		MailPassword     string
-		StorageEndpoint  string
-		StorageAccessKey string
-		StorageSecretKey string
+		DB           *gorm.DB
+		MailHost     string
+		MailPort     string
+		MailFrom     string
+		MailPassword string
+		MailUser     string
 	}
 	Input struct {
 		Endpoint    string
@@ -33,14 +31,12 @@ type (
 		MerchantTin string
 
 		// * NOTE * : Optional & Integration To the Third Party
-		DB               *gorm.DB // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
-		MailHost         string
-		MailPort         string
-		MailFrom         string
-		MailPassword     string
-		StorageEndpoint  string
-		StorageAccessKey string
-		StorageSecretKey string
+		DB           *gorm.DB // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
+		MailHost     string
+		MailPort     string
+		MailFrom     string
+		MailPassword string
+		MailUser     string
 	}
 )
 
@@ -62,9 +58,7 @@ func New(input Input) *EbarimtClient {
 		input.MailPort,
 		input.MailFrom,
 		input.MailPassword,
-		input.StorageEndpoint,
-		input.StorageAccessKey,
-		input.StorageSecretKey,
+		input.MailUser,
 	}
 }
 
@@ -126,15 +120,13 @@ func (e *EbarimtClient) Create(input models.CreateInputModel) (*structs.ReceiptR
 		// TODO : Send Ebarimt to Mail
 		ebarimt3SdkServices.SendMail(
 			ebarimt3SdkServices.EmailInput{
-				Email:            input.MailTo,
-				From:             e.MailFrom,
-				Password:         e.MailPassword,
-				SmtpHost:         e.MailHost,
-				SmtpPort:         e.MailPort,
-				StorageEndpoint:  e.StorageEndpoint,
-				StorageAccessKey: e.StorageAccessKey,
-				StorageSecretKey: e.StorageSecretKey,
-				Response:         res,
+				Email:    input.MailTo,
+				From:     e.MailFrom,
+				User:     e.MailUser,
+				Password: e.MailPassword,
+				SmtpHost: e.MailHost,
+				SmtpPort: e.MailPort,
+				Response: res,
 			},
 		)
 	}
