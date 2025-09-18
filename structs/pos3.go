@@ -266,12 +266,15 @@ type (
 	// Дэд төлбөрийн баримтын мэдээлэл
 	Receipt struct {
 		ID            string            `json:"id"`            // Дэд төлбөрийн баримтын ДДТД
+		BankAccountId int               `json:"bankAccountId"` // ААН, Иргэний системд бүртгэсэн банкны дансны ID
 		TotalAmount   float64           `json:"totalAmount"`   // Дэд төлбөрийн баримтын гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
 		TotalVat      float64           `json:"totalVat"`      // Дэд төлбөрийн баримтын НӨАТ-н нийт дүн
 		TotalCityTax  float64           `json:"totalCityTax"`  // Дэд төлбөрийн баримтын НХАТ-н нийт дүн
 		TaxType       constants.TaxType `json:"taxType"`       // Татварын төрөл
 		MerchantTin   string            `json:"merchantTin"`   // Борлуулагчийн ТТД
+		CustomerTin   string            `json:"customerTin"`   // Худалдан авагчийн ТТД
 		BankAccountNo string            `json:"bankAccountNo"` // Нэхэмжлэхийн банкны дансны дугаар
+		IBan          string            `json:"iBan"`          // Олон улсын банкны дансны дугаарлалт
 		Data          interface{}       `json:"data"`          // Дэд төлбөрийн баримтын нэмэлт өгөгдөл.
 		Items         []Item            `json:"items"`         // Борлуулсан бүтээгдэхүүн, үйлчилгээний жагсаалт
 	}
@@ -286,11 +289,11 @@ type (
 		MeasureUnit        string                `json:"measureUnit"`        // Хэмжих нэгж
 		Qty                float64               `json:"qty"`                // Борлуулсан тоо, хэмжээ
 		UnitPrice          float64               `json:"unitPrice"`          // Нэгж үнэ (Бүх төрлийн татвар шингэсэн дүн)
-		TotalBonus         float64               `json:"totalBonus"`
-		TotalVat           float64               `json:"totalVat"`     // Бүтээгдэхүүн, үйлчилгээний НӨАТ-н нийт дүн
-		TotalCityTax       float64               `json:"totalCityTax"` // Бүтээгдэхүүн, үйлчилгээний НХАТ-н нийт дүн
-		TotalAmount        float64               `json:"totalAmount"`  // Бүтээгдэхүүн, үйлчилгээний гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
-		Data               interface{}           `json:"data"`         // Бүтээгдэхүүн, үйлчилгээний нэмэлт өгөгдөл
+		TotalBonus         float64               `json:"totalBonus"`         //
+		TotalVat           float64               `json:"totalVat"`           // Бүтээгдэхүүн, үйлчилгээний НӨАТ-н нийт дүн
+		TotalCityTax       float64               `json:"totalCityTax"`       // Бүтээгдэхүүн, үйлчилгээний НХАТ-н нийт дүн
+		TotalAmount        float64               `json:"totalAmount"`        // Бүтээгдэхүүн, үйлчилгээний гүйлгээний нийт дүн (Бүх төрлийн татвар шингэсэн дүн)
+		Data               interface{}           `json:"data"`               // Бүтээгдэхүүн, үйлчилгээний нэмэлт өгөгдөл
 	}
 
 	// Төлбөрийн хэлбэрийн мэдээлэл
@@ -299,7 +302,14 @@ type (
 		ExchangeCode string                  `json:"exchangeCode"` // Төлбөр хийж гүйцэтгэх гуравдагч системийн код
 		Status       constants.PaymentStatus `json:"status"`       // Төлбөрийн хэлбэрийн төлөв
 		PaidAmount   float64                 `json:"paidAmount"`   // Нийт төлсөн дүн
-		Data         interface{}             `json:"data"`         // Төлбөрийн нэмэлт өгөгдөл
+		Data         interface{}             `json:"data"`         // Төлбөрийн нэмэлт өгөгдөл /code талбарын утга PAYMENT_CARD бол дата талбарын нэмэх боломжтой/
+	}
+
+	EasyBankCard struct {
+		TerminalID       string `json:"terminalID"`
+		RRN              string `json:"rrn"`
+		MaskedCardNumber string `json:"maskedCardNumber"`
+		Easy             bool   `json:"easy"`
 	}
 
 	// Баримтын хариу
