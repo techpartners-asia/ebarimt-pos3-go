@@ -68,7 +68,7 @@ func (e *EbarimtClient) Create(input models.CreateInputModel) (*structs.ReceiptR
 	request := e.buildRequest(input)
 
 	// * NOTE * : Build RECEIPT ITEMS By Tax Type as Map
-	receiptsItems, err := e.buildReceiptItemMap(input.Items)
+	receiptsItems, err := e.buildReceiptItemMap(input.Items, &request)
 	if err != nil {
 		return nil, err
 	}

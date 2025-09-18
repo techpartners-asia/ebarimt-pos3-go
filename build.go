@@ -43,7 +43,7 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 }
 
 // * NOTE * : Step - 2 : Categorying by Tax Type
-func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel) (map[constants.TaxType]structs.Receipt, error) {
+func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel, receiptRequest *structs.ReceiptRequest) (map[constants.TaxType]structs.Receipt, error) {
 
 	info, err := e.GetInfo(e.GetMerchantTin())
 	if err != nil {
@@ -113,7 +113,7 @@ func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel
 		receipt.TotalAmount += receiptItem.TotalAmount
 		receipt.TotalVat += receiptItem.TotalVat
 		receipt.TotalCityTax += receiptItem.TotalCityTax
-
+		receipt.CustomerTin = receiptRequest.CustomerTin
 		receipt.MerchantTin = e.GetMerchantTin()
 		receipt.Items = append(receipt.Items, receiptItem)
 		receiptItems[productTaxType] = receipt
