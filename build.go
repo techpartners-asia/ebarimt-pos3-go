@@ -28,7 +28,7 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 				if err != nil {
 					return ""
 				}
-				return tin.Data
+				return fmt.Sprintf("%d", tin.Data)
 			}
 			return ""
 		}(),

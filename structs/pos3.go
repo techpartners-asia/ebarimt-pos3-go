@@ -62,8 +62,7 @@ type (
 	GetTinInfoResponse struct {
 		Msg    string `json:"msg"`    // Сервисийн хариу
 		Status int    `json:"status"` // Service ийн төлөв
-		Code   string `json:"code"`   // Код
-		Data   string `json:"data"`   // ТИН дугаар
+		Data   int    `json:"data"`   // ТИН дугаар
 	}
 
 	// Татвар төлөгчийн бүртгэлийн мэдээлэл лавлах сервис хариу
@@ -398,6 +397,28 @@ type (
 		Status  int    `json:"status"`
 		Message string `json:"message"`
 		Date    string `json:"date"`
+	}
+)
+
+// endregion
+
+// region ОАТ API холболт
+type (
+	OATGetInventoryListResponse struct {
+		Msg    string                    `json:"msg"`
+		Status int                       `json:"status"`
+		Data   []OATGetInventoryListData `json:"data"`
+	}
+	OATGetInventoryListData struct {
+		Barcode            string  `json:"barcode"`
+		BarcodeName        string  `json:"barcodeName"`
+		ClassificationCode string  `json:"classificationCode"`
+		ProductTypeCode    string  `json:"productTypeCode"`
+		ProductTypeName    string  `json:"productTypeName"`
+		ProductCategory    string  `json:"productCategory"`
+		ProductPercent     float64 `json:"productPercent"`
+		ProductSize        float64 `json:"productSize"`
+		UnitCode           string  `json:"unitCode"`
 	}
 )
 
