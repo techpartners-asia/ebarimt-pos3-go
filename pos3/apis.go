@@ -15,9 +15,11 @@ import (
 
 var (
 	TokenAPI = utils.API{
-		Url:    "https://st.auth.itc.gov.mn/auth/realms/Staging/protocol/openid-connect/token",
+		Url:    "https://auth.itc.gov.mn/auth/realms/ITC/protocol/openid-connect/token",
 		Method: http.MethodPost,
 	}
+
+	// Нээлттэй API холболт
 	GetBranchInfoAPI = utils.API{
 		Url:    "https://api.ebarimt.mn/api/info/check/getBranchInfo",
 		Method: http.MethodGet,
@@ -35,6 +37,29 @@ var (
 		IsAuth: false,
 	}
 
+	// Pos API 3.0 холболт
+	PosReceiptSendAPI = utils.API{
+		Url:    "/rest/receipt",
+		Method: http.MethodPost,
+	}
+	PosReceiptDeleteAPI = utils.API{
+		Url:    "/rest/receipt",
+		Method: http.MethodDelete,
+	}
+	PosSendAPI = utils.API{
+		Url:    "/rest/sendData",
+		Method: http.MethodGet,
+	}
+	PosInfoAPI = utils.API{
+		Url:    "/rest/info",
+		Method: http.MethodGet,
+	}
+	PosBankAccAPI = utils.API{
+		Url:    "/rest/bankAccounts?",
+		Method: http.MethodGet,
+	}
+
+	// Цахим төлбөрийн баримт API холболт
 	GetSalesTotalAPI = utils.API{
 		Url:    "https://api.ebarimt.mn/api/tpi/receipt/getSalesTotalData",
 		Method: http.MethodPost,
@@ -51,7 +76,7 @@ var (
 		IsAuth: true,
 	}
 
-	// Хялбар бүртгэл
+	// Хялбар бүртгэл API холболт
 	ConsumerInfoAPI = utils.API{
 		Url:    "https://service.itc.gov.mn/api/easy-register/api/info/consumer/",
 		Method: http.MethodGet,
@@ -83,26 +108,17 @@ var (
 		Method: http.MethodPut,
 		IsAuth: true,
 	}
-	// Pos requests
-	PosReceiptSendAPI = utils.API{
-		Url:    "/rest/receipt",
+
+	// ОАТ API холболт
+	GetInventoryListAPI = utils.API{
+		Url:    "https://service.itc.gov.mn/rest/tpiMain/mainApi/getInventoryList",
+		Method: http.MethodGet,
+		IsAuth: false,
+	}
+	GetActiveStockNoPosAPI = utils.API{
+		Url:    "https://service.itc.gov.mn/api/inventory/getActiveStockNoPos",
 		Method: http.MethodPost,
-	}
-	PosReceiptDeleteAPI = utils.API{
-		Url:    "/rest/receipt",
-		Method: http.MethodDelete,
-	}
-	PosSendAPI = utils.API{
-		Url:    "/rest/sendData",
-		Method: http.MethodGet,
-	}
-	PosInfoAPI = utils.API{
-		Url:    "/rest/info",
-		Method: http.MethodGet,
-	}
-	PosBankAccAPI = utils.API{
-		Url:    "/rest/bankAccounts?",
-		Method: http.MethodGet,
+		IsAuth: true,
 	}
 )
 
