@@ -35,8 +35,13 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 		// TotalAmount:  input.TotalAmount,
 		// TotalVat:     input.TotalVat,
 		// TotalCityTax: input.TotalCityTax,
-		ConsumerNo:  "",
-		ReportMonth: nil,
+		ConsumerNo: "",
+		ReportMonth: func() *string {
+			if input.ReportMonth != nil {
+				return input.ReportMonth
+			}
+			return nil
+		}(),
 	}
 
 	return ebarimtRequest

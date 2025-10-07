@@ -15,6 +15,7 @@ type (
 		DistrictCode string                 `json:"district_code"`
 		Payments     []Payment              `json:"payments"` // Хоосон явуулбал , Payments нь автоматаар Card төлбөр болгон
 		Items        []CreateItemInputModel `json:"items"`
+		ReportMonth  *string                `json:"report_month"`
 		// DB           *gorm.DB               // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
 	}
 
