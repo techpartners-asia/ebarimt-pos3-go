@@ -7,6 +7,7 @@ import (
 	"mime/multipart"
 	"net/textproto"
 	"strconv"
+	"time"
 
 	"github.com/skip2/go-qrcode"
 )
@@ -110,4 +111,12 @@ func GenerateInlineQR(htmlBody, qrData string) ([]byte, string, error) {
 	writer.Close()
 
 	return buf.Bytes(), writer.Boundary(), nil
+}
+
+func FormatDate(date string) string {
+	parsedDate, err := time.Parse(date, "2006-01-02")
+	if err != nil {
+		return "-"
+	}
+	return parsedDate.Format("2006-01-02")
 }

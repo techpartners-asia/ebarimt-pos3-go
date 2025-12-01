@@ -7,8 +7,6 @@ import (
 	"html/template"
 	"math"
 	"net/smtp"
-	"os"
-	"path/filepath"
 
 	"github.com/techpartners-asia/ebarimt-pos3-go/constants"
 	models "github.com/techpartners-asia/ebarimt-pos3-go/structs"
@@ -55,7 +53,7 @@ func SendMail(input EmailInput) error {
 	// }
 
 	emailBody := SendEmailBody{
-		Date:         input.Response.Date,
+		Date:         utils.FormatDate(input.Response.Date),
 		TotalAmount:  utils.FloatToStr(math.Round(input.Response.TotalAmount*100) / 100),
 		TotalVat:     utils.FloatToStr(math.Round(input.Response.TotalVat*100) / 100),
 		TotalCityTax: utils.FloatToStr(math.Round(input.Response.TotalCityTax*100) / 100),
@@ -71,30 +69,7 @@ func SendMail(input EmailInput) error {
 		emailBody.BillType = "Хувь хүн"
 	}
 
-	// for _, receipt := range input.Response.Receipts {
-	// 	for _, item := range receipt.Items {
-	// 		emailBody.Items = append(emailBody.Items, struct {
-	// 			Name         string `json:"name"`
-	// 			Qty          string `json:"qty"`
-	// 			TotalAmount  string `json:"total_amount"`
-	// 			TotalVat     string `json:"total_vat"`
-	// 			TotalCityTax string `json:"total_city_tax"`
-	// 		}{
-	// 			Name:         item.Name,
-	// 			Qty:          utils.FloatToStr(item.Qty),
-	// 			TotalAmount:  utils.FloatToStr(math.Round(item.TotalAmount*100) / 100),
-	// 			TotalVat:     utils.FloatToStr(math.Round(item.TotalVat*100) / 100),
-	// 			TotalCityTax: utils.FloatToStr(math.Round(item.TotalCityTax*100) / 100),
-	// 		})
-	// 	}
-	// }
-
-	wd, err := os.Getwd()
-	if err != nil {
-		return err
-	}
-
-	templatePath := filepath.Join(wd, "files/mail/ebarimt.html")
+	templatePath := "../files/mail/ebarimt.html"
 
 	t, err := template.ParseFiles(templatePath)
 	if err != nil {
