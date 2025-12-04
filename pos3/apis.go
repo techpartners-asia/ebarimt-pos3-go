@@ -21,18 +21,18 @@ var (
 
 	// Нээлттэй API холболт
 	GetBranchInfoAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/info/check/getBranchInfo",
+		Url:    "/api/info/check/getBranchInfo",
 		Method: http.MethodGet,
 		IsAuth: false,
 	}
 	GetTinInfoAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/info/check/getTinInfo?regNo=",
+		Url:    "/api/info/check/getTinInfo?regNo=",
 		Method: http.MethodGet,
 		IsAuth: false,
 	}
 
 	GetInfoAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/info/check/getInfo?tin=",
+		Url:    "/api/info/check/getInfo?tin=",
 		Method: http.MethodGet,
 		IsAuth: false,
 	}
@@ -138,7 +138,7 @@ func (p *pos3) httpRequest(body interface{}, api utils.API, ext string, headers 
 		requestBody = bytes.NewReader(requestByte)
 	}
 
-	req, _ := http.NewRequest(api.Method, api.Url+ext, requestBody)
+	req, _ := http.NewRequest(api.Method, p.posEndpoint+api.Url+ext, requestBody)
 	req.Header.Add("Accept", utils.HttpAcceptPublic)
 	for _, header := range headers {
 		req.Header.Add(header.Name, header.Value)
