@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/techpartners-asia/ebarimt-go/utils"
 	"github.com/techpartners-asia/ebarimt-pos3-go/structs"
+	"github.com/techpartners-asia/ebarimt-pos3-go/utils"
 )
 
 var (
@@ -21,20 +21,23 @@ var (
 
 	// Нээлттэй API холболт
 	GetBranchInfoAPI = utils.API{
-		Url:    "/api/info/check/getBranchInfo",
+		Url:    "https://api.ebarimt.mn/api/info/check/getBranchInfo",
 		Method: http.MethodGet,
 		IsAuth: false,
+		DevUrl: "https://st-api.ebarimt.mn/api/info/check/getBranchInfo",
 	}
 	GetTinInfoAPI = utils.API{
-		Url:    "/api/info/check/getTinInfo?regNo=",
+		Url:    "https://api.ebarimt.mn/api/info/check/getTinInfo?regNo=",
 		Method: http.MethodGet,
 		IsAuth: false,
+		DevUrl: "https://st-api.ebarimt.mn/api/info/check/getTinInfo?regNo=",
 	}
 
 	GetInfoAPI = utils.API{
-		Url:    "/api/info/check/getInfo?tin=",
+		Url:    "https://api.ebarimt.mn/api/info/check/getInfo?tin=",
 		Method: http.MethodGet,
 		IsAuth: false,
+		DevUrl: "https://st-api.ebarimt.mn/api/info/check/getInfo?tin=",
 	}
 
 	// Pos API 3.0 холболт
@@ -138,8 +141,16 @@ func (p *pos3) httpRequest(body interface{}, api utils.API, ext string, headers 
 		requestBody = bytes.NewReader(requestByte)
 	}
 
-	req, _ := http.NewRequest(api.Method, p.posEndpoint+api.Url+ext, requestBody)
+	url := api.Url + ext
+	if p.isDev && len(api.DevUrl) > 0 {
+		url = api.DevUrl + ext
+	}
+
+	req, _ := http.NewRequest(api.Method, url, requestBody)
 	req.Header.Add("Accept", utils.HttpAcceptPublic)
+
+	fmt.Println(req.RequestURI)
+
 	for _, header := range headers {
 		req.Header.Add(header.Name, header.Value)
 	}

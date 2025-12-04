@@ -29,6 +29,7 @@ type (
 		Endpoint    string
 		PosNo       string
 		MerchantTin string
+		IsDev       bool
 
 		// * NOTE * : Optional & Integration To the Third Party
 		DB           *gorm.DB // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
@@ -45,6 +46,7 @@ func New(input Input) *EbarimtClient {
 		PosEndpoint: input.Endpoint,
 		PosNo:       input.PosNo,
 		MerchantTin: input.MerchantTin,
+		IsDev:       input.IsDev,
 	})
 
 	if input.DB != nil {

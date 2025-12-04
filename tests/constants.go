@@ -11,9 +11,10 @@ const (
 func NewSdk() *ebarimt3.EbarimtClient {
 	sdk := ebarimt3.New(ebarimt3.Input{
 		Endpoint:    "http://103.50.205.106:7080",
-		MerchantTin: "87001066048",
-		PosNo:       "10005608",
+		MerchantTin: "37900846788",
+		PosNo:       "101317341",
 		DB:          nil,
+		IsDev:       true,
 	})
 
 	return sdk

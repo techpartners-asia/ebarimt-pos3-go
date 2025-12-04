@@ -10,6 +10,7 @@ type pos3 struct {
 	token       *structs.TokenResponse
 	merchanTin  string
 	posNo       string
+	isDev       bool
 }
 
 type ConnectionInput struct {
@@ -17,6 +18,7 @@ type ConnectionInput struct {
 	ApiKey      string
 	PosNo       string
 	MerchantTin string
+	IsDev       bool
 }
 
 func New(input ConnectionInput) Pos3 {
@@ -25,6 +27,7 @@ func New(input ConnectionInput) Pos3 {
 		posEndpoint: input.PosEndpoint,
 		merchanTin:  input.MerchantTin,
 		posNo:       input.PosNo,
+		isDev:       input.IsDev,
 	}
 }
 

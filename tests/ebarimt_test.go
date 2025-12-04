@@ -14,10 +14,10 @@ import (
 
 var items = []structs.CreateItemInputModel{{
 	Name:               "VAT & VAT ZERO & VAT FREE & NO VAT",
-	TaxType:            constants.TAX_VAT_ZERO,
+	TaxType:            constants.TAX_VAT_ABLE,
 	ClassificationCode: "2441030",
 	Qty:                1,
-	IsCityTax:          true,
+	IsCityTax:          false,
 	MeasureUnit:        "unit",
 	TotalAmount:        10,
 	TaxProductCode:     "447",
