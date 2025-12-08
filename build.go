@@ -23,14 +23,25 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 			return constants.RECEIPT_B2B_RECEIPT
 		}(),
 		CustomerTin: func() string {
-			if len(input.OrgCode) > 0 {
-				tin, err := e.GetTinInfo(input.OrgCode)
+			if len(input.CustomerTin) > 0 {
+				res, err := e.GetInfo(input.CustomerTin)
 				if err != nil {
 					return ""
 				}
-				return fmt.Sprintf("%d", tin.Data)
+				if res.Status != 200 {
+					return ""
+				}
+				return input.CustomerTin
+			} else {
+				if len(input.OrgCode) > 0 {
+					tin, err := e.GetTinInfo(input.OrgCode)
+					if err != nil {
+						return ""
+					}
+					return fmt.Sprintf("%d", tin.Data)
+				}
+				return ""
 			}
-			return ""
 		}(),
 		// TotalAmount:  input.TotalAmount,
 		// TotalVat:     input.TotalVat,

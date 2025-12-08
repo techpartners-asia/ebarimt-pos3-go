@@ -33,8 +33,8 @@ func (p *pos3) GetTinInfo(regNo string) (structs.GetTinInfoResponse, error) {
 	return resp, nil
 }
 
-func (p *pos3) GetInfo(regNo string) (structs.GetInfoResponse, error) {
-	response, err := p.httpRequest(nil, GetInfoAPI, regNo, nil)
+func (p *pos3) GetInfo(customerTin string) (structs.GetInfoResponse, error) {
+	response, err := p.httpRequest(nil, GetInfoAPI, customerTin, nil)
 	if err != nil {
 		return structs.GetInfoResponse{}, err
 	}

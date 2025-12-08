@@ -10,7 +10,8 @@ type (
 		TotalAmount  float64                `json:"total_amount"`
 		TotalVat     float64                `json:"total_vat"`
 		TotalCityTax float64                `json:"total_city_tax"`
-		OrgCode      string                 `json:"org_code"`
+		CustomerTin  string                 `json:"customer_tin"` // хэрэглэгчийн TIN дугаар
+		OrgCode      string                 `json:"org_code"`     // хэрэглэгчийн регистрийн дугаар
 		BranchNo     string                 `json:"branch_no"`
 		DistrictCode string                 `json:"district_code"`
 		Payments     []Payment              `json:"payments"` // Хоосон явуулбал , Payments нь автоматаар Card төлбөр болгон

@@ -36,7 +36,7 @@ type Pos3 interface {
 	GetMerchantTin() string
 	GetPosNo() string
 	// Цахим төлбөрийн баримт
-	GetInfo(regNo string) (structs.GetInfoResponse, error)
+	GetInfo(customerTin string) (structs.GetInfoResponse, error)
 	GetTinInfo(regNo string) (structs.GetTinInfoResponse, error)
 	GetBranchInfo() (structs.GetBranchInfoResponse, error)
 	GetSalesTotalData(body structs.GetSalesTotalDataRequest) (structs.GetSalesTotalDataResponse, error)
