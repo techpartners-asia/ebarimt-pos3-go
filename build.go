@@ -17,7 +17,7 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 		MerchantTin: e.GetMerchantTin(),
 		PosNo:       e.GetPosNo(),
 		Type: func() constants.ReceiptType {
-			if len(input.OrgCode) == 0 {
+			if len(input.OrgCode) == 0 || len(input.CustomerTin) == 0 {
 				return constants.RECEIPT_B2C_RECEIPT
 			}
 			return constants.RECEIPT_B2B_RECEIPT
@@ -32,16 +32,16 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 					return ""
 				}
 				return input.CustomerTin
-			} else {
-				if len(input.OrgCode) > 0 {
-					tin, err := e.GetTinInfo(input.OrgCode)
-					if err != nil {
-						return ""
-					}
-					return fmt.Sprintf("%d", tin.Data)
-				}
-				return ""
 			}
+
+			if len(input.OrgCode) > 0 {
+				tin, err := e.GetTinInfo(input.OrgCode)
+				if err != nil {
+					return ""
+				}
+				return fmt.Sprintf("%d", tin.Data)
+			}
+			return ""
 		}(),
 		// TotalAmount:  input.TotalAmount,
 		// TotalVat:     input.TotalVat,
