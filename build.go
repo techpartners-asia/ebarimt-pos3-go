@@ -17,7 +17,7 @@ func (e *EbarimtClient) buildRequest(input structs.CreateInputModel) structs.Rec
 		MerchantTin: e.GetMerchantTin(),
 		PosNo:       e.GetPosNo(),
 		Type: func() constants.ReceiptType {
-			if len(input.OrgCode) == 0 || len(input.CustomerTin) == 0 {
+			if len(input.OrgCode) == 0 {
 				return constants.RECEIPT_B2C_RECEIPT
 			}
 			return constants.RECEIPT_B2B_RECEIPT
