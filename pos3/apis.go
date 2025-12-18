@@ -21,20 +21,20 @@ var (
 
 	// Нээлттэй API холболт
 	GetBranchInfoAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/info/check/getBranchInfo",
+		Url:    "https://ebarimt.techpartners.asia/api/info/check/getBranchInfo",
 		Method: http.MethodGet,
 		IsAuth: false,
 		DevUrl: "https://st-api.ebarimt.mn/api/info/check/getBranchInfo",
 	}
 	GetTinInfoAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/info/check/getTinInfo?regNo=",
+		Url:    "https://ebarimt.techpartners.asia/api/info/check/getTinInfo?regNo=",
 		Method: http.MethodGet,
 		IsAuth: false,
 		DevUrl: "https://st-api.ebarimt.mn/api/info/check/getTinInfo?regNo=",
 	}
 
 	GetInfoAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/info/check/getInfo?tin=",
+		Url:    "https://ebarimt.techpartners.asia/api/info/check/getInfo?tin=",
 		Method: http.MethodGet,
 		IsAuth: false,
 		DevUrl: "https://st-api.ebarimt.mn/api/info/check/getInfo?tin=",
@@ -64,17 +64,17 @@ var (
 
 	// Цахим төлбөрийн баримт API холболт
 	GetSalesTotalAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/tpi/receipt/getSalesTotalData",
+		Url:    "https://ebarimt.techpartners.asia/api/tpi/receipt/getSalesTotalData",
 		Method: http.MethodPost,
 		IsAuth: true,
 	}
 	GetSalesListERPAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/tpi/receipt/getSaleListERP",
+		Url:    "https://ebarimt.techpartners.asia/api/tpi/receipt/getSaleListERP",
 		Method: http.MethodPost,
 		IsAuth: true,
 	}
 	SaveOprMerchantsAPI = utils.API{
-		Url:    "https://api.ebarimt.mn/api/tpi/receipt/%20saveOprMerchants",
+		Url:    "https://ebarimt.techpartners.asia/api/tpi/receipt/%20saveOprMerchants",
 		Method: http.MethodPost,
 		IsAuth: true,
 	}
