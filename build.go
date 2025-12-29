@@ -88,7 +88,7 @@ func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel
 				return 0
 			}(),
 			UnitPrice:   utils.NumberPrecision(item.TotalAmount / float64(item.Qty)),
-			TotalAmount: item.TotalAmount,
+			TotalAmount: utils.NumberPrecision(item.TotalAmount),
 			TotalCityTax: func() float64 {
 				if item.TaxType != constants.TAX_VAT_ABLE {
 					return 0
@@ -115,9 +115,9 @@ func (e *EbarimtClient) buildReceiptItemMap(items []structs.CreateItemInputModel
 		receiptItem.Name = item.Name
 		receipt := receiptItems[productTaxType]
 		receipt.TaxType = productTaxType
-		receipt.TotalAmount += receiptItem.TotalAmount
-		receipt.TotalVat += receiptItem.TotalVat
-		receipt.TotalCityTax += receiptItem.TotalCityTax
+		receipt.TotalAmount = utils.NumberPrecision(receiptItem.TotalAmount + receipt.TotalAmount)
+		receipt.TotalVat = receiptItem.TotalVat + receipt.TotalVat
+		receipt.TotalCityTax = receiptItem.TotalCityTax + receipt.TotalCityTax
 		receipt.CustomerTin = receiptRequest.CustomerTin
 		receipt.MerchantTin = e.GetMerchantTin()
 		receipt.Items = append(receipt.Items, receiptItem)
@@ -137,9 +137,9 @@ func (e *EbarimtClient) buildReceipt(request *structs.ReceiptRequest, items map[
 	for _, item := range items {
 
 		receipts = append(receipts, item)
-		totalAmount += item.TotalAmount
-		totalVat += item.TotalVat
-		totalCityTax += item.TotalCityTax
+		totalAmount = utils.NumberPrecision(item.TotalAmount + totalAmount)
+		totalVat = item.TotalVat + totalVat
+		totalCityTax = item.TotalCityTax + totalCityTax
 	}
 
 	request.TotalAmount = totalAmount
