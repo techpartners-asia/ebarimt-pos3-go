@@ -58,8 +58,14 @@ func Float64ToString(f float64) string {
 }
 
 func NumberPrecision(value float64) float64 {
-	return float64(int(value*100)) / 100
-	// return float64(int(value*100)) / 100
+
+	// dt := float64(int(value*100)) / 100
+
+	formatted := strconv.FormatFloat(value, 'f', 2, 64)
+
+	num, _ := strconv.ParseFloat(formatted, 64)
+
+	return num
 }
 
 func GetVat(value float64) float64 {
