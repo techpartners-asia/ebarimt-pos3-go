@@ -1,16 +1,15 @@
 package pos3
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"time"
 
 	"github.com/techpartners-asia/ebarimt-pos3-go/structs"
 	"github.com/techpartners-asia/ebarimt-pos3-go/utils"
+	"resty.dev/v3"
 )
 
 var (
@@ -131,28 +130,17 @@ type CustomHeader struct {
 }
 
 func (p *pos3) httpRequest(body interface{}, api utils.API, ext string, headers []CustomHeader) ([]byte, error) {
-
-	var requestByte []byte
-	var requestBody *bytes.Reader
-	if body == nil {
-		requestBody = bytes.NewReader(nil)
-	} else {
-		requestByte, _ = json.Marshal(body)
-		requestBody = bytes.NewReader(requestByte)
-	}
-
 	url := api.Url + ext
 	if p.isDev && len(api.DevUrl) > 0 {
 		url = api.DevUrl + ext
 	}
 
-	req, _ := http.NewRequest(api.Method, url, requestBody)
-	req.Header.Add("Accept", utils.HttpAcceptPublic)
-
-	fmt.Println(req.RequestURI)
-
+	req := p.client.R().SetHeader("Accept", utils.HttpAcceptPublic)
 	for _, header := range headers {
-		req.Header.Add(header.Name, header.Value)
+		req.SetHeader(header.Name, header.Value)
+	}
+	if body != nil {
+		req.SetBody(body)
 	}
 	if api.IsAuth {
 		token, err := p.auth()
@@ -160,32 +148,27 @@ func (p *pos3) httpRequest(body interface{}, api utils.API, ext string, headers 
 			return nil, err
 		}
 		p.token = &token
-		req.Header.Add("Authorization", "Bearer "+p.token.AccessToken)
+		req.SetAuthToken(p.token.AccessToken)
 	}
-	res, err := http.DefaultClient.Do(req)
+
+	res, err := req.Execute(api.Method, url)
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
-	response, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
+	defer closeBody(res)
+
+	if !res.IsSuccess() {
+		return nil, errors.New(res.String())
 	}
-	if res.StatusCode != 200 {
-		return nil, errors.New(string(response))
-	}
-	return response, nil
+	return res.Bytes(), nil
 }
 
 func (q *pos3) auth() (authRes structs.TokenResponse, err error) {
 	if q.token != nil {
 		expireInA, _ := time.Parse(time.RFC3339, q.token.ExpiresIn)
 		expireInB := expireInA.Add(time.Duration(-12) * time.Hour)
-		now := time.Now()
-		if now.Before(expireInB) {
-			authRes = *q.token
-			err = nil
-			return
+		if time.Now().Before(expireInB) {
+			return *q.token, nil
 		}
 	}
 	body := structs.TokenRequest{
@@ -195,47 +178,32 @@ func (q *pos3) auth() (authRes structs.TokenResponse, err error) {
 		ClientID:  "",
 	}
 
-	requestByte, _ := json.Marshal(body)
-	requestBody := bytes.NewReader(requestByte)
+	res, err := q.client.R().
+		SetHeader("Accept", utils.HttpAcceptPrivate).
+		SetHeader("Content-Type", utils.HttpContentType).
+		SetBody(body).
+		Execute(TokenAPI.Method, TokenAPI.Url)
+	if err != nil {
+		return authRes, err
+	}
+	defer closeBody(res)
 
-	req, err := http.NewRequest(TokenAPI.Method, TokenAPI.Url, requestBody)
-	if err != nil {
-		fmt.Println(err.Error())
+	if !res.IsSuccess() {
+		return authRes, fmt.Errorf("%s- Ebarimt POS 3.0 openid connect error response: %s", time.Now().Format(utils.TimeFormatYYYYMMDDHHMMSS), res.Status())
 	}
-	req.Header.Add("Accept", utils.HttpAcceptPrivate)
-	req.Header.Add("Content-Type", utils.HttpContentType)
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return
+	if err := json.Unmarshal(res.Bytes(), &authRes); err != nil {
+		return authRes, err
 	}
-	defer res.Body.Close()
-	if res.StatusCode != http.StatusOK {
-		return authRes, fmt.Errorf("%s- Ebarimt POS 3.0 openid connect error response: %s", time.Now().Format(utils.TimeFormatYYYYMMDDHHMMSS), res.Status)
-	}
-	resp, _ := io.ReadAll(res.Body)
-	json.Unmarshal(resp, &authRes)
 	return authRes, nil
 }
 
 func (p *pos3) httpPosRequest(body interface{}, api utils.API, ext string, headers []CustomHeader) ([]byte, error) {
-
-	var requestByte []byte
-	var requestBody *bytes.Reader
-	if body == nil {
-		requestBody = bytes.NewReader(nil)
-	} else {
-		requestByte, _ = json.Marshal(body)
-		requestBody = bytes.NewReader(requestByte)
-	}
-
-	req, err := http.NewRequest(api.Method, p.posEndpoint+api.Url+ext, requestBody)
-	if err != nil {
-		return nil, err
-	}
-	// req.Header.Add("Accept", utils.HttpAcceptPublic)
-	req.Header.Add("Content-type", utils.HttpAcceptPrivate)
+	req := p.client.R().SetHeader("Content-type", utils.HttpAcceptPrivate)
 	for _, header := range headers {
-		req.Header.Add(header.Name, header.Value)
+		req.SetHeader(header.Name, header.Value)
+	}
+	if body != nil {
+		req.SetBody(body)
 	}
 	if api.IsAuth {
 		token, err := p.auth()
@@ -243,19 +211,25 @@ func (p *pos3) httpPosRequest(body interface{}, api utils.API, ext string, heade
 			return nil, err
 		}
 		p.token = &token
-		req.Header.Add("Authorization", "Bearer "+p.token.AccessToken)
+		req.SetAuthToken(p.token.AccessToken)
 	}
-	res, err := http.DefaultClient.Do(req)
+
+	res, err := req.Execute(api.Method, p.posEndpoint+api.Url+ext)
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
-	response, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
+	defer closeBody(res)
+
+	// The POS 3.0 endpoint returns meaningful bodies on non-2xx statuses that
+	// callers parse, so the status itself is intentionally not treated as an error.
+	return res.Bytes(), nil
+}
+
+// closeBody releases a response body. Resty drains and closes it while decoding
+// 2xx and >=400 responses, but not for 204 or 3xx, and the body's Close is what
+// cancels the per-request timeout context.
+func closeBody(res *resty.Response) {
+	if res != nil && res.Body != nil {
+		_ = res.Body.Close()
 	}
-	// if res.StatusCode != 200 {
-	// 	return nil, errors.New(string(response))
-	// }
-	return response, nil
 }

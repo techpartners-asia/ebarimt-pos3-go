@@ -30,6 +30,8 @@ type (
 		PosNo       string
 		MerchantTin string
 		IsDev       bool
+		// TimeoutSeconds bounds each HTTP request. Zero uses the default (30s).
+		TimeoutSeconds int
 
 		// * NOTE * : Optional & Integration To the Third Party
 		DB           *gorm.DB // Хоосон байж болно. Хэрвээ байвал, database дээр хадгална автоматаар
@@ -43,10 +45,11 @@ type (
 
 func New(input Input) *EbarimtClient {
 	posv3 := pos3.New(pos3.ConnectionInput{
-		PosEndpoint: input.Endpoint,
-		PosNo:       input.PosNo,
-		MerchantTin: input.MerchantTin,
-		IsDev:       input.IsDev,
+		PosEndpoint:    input.Endpoint,
+		PosNo:          input.PosNo,
+		MerchantTin:    input.MerchantTin,
+		IsDev:          input.IsDev,
+		TimeoutSeconds: input.TimeoutSeconds,
 	})
 
 	if input.DB != nil {
