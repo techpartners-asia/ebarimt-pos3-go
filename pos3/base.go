@@ -48,7 +48,7 @@ func New(input ConnectionInput) Pos3 {
 			timeout = time.Duration(input.TimeoutSeconds) * time.Second
 		}
 		client = resty.New().
-			SetTransport(newTransport()).
+			SetTransport(newTransport(timeout)).
 			SetTimeout(timeout).
 			SetRedirectPolicy(resty.NoRedirectPolicy())
 	}
@@ -62,12 +62,15 @@ func New(input ConnectionInput) Pos3 {
 	}
 }
 
-// newTransport returns an http.Transport with per-phase deadlines so a stalled
-// connect, TLS handshake, or slow gov response cannot occupy the caller for the
-// full client timeout. NoRedirectPolicy on the client surfaces a 3xx as a
-// non-2xx error instead of silently following it (a redirect on POST /rest/receipt
-// is never something to follow, and following one is what stalled callers before).
-func newTransport() *http.Transport {
+// newTransport returns an http.Transport whose connection-establishment phases
+// (dial, TLS handshake) stay short so an unreachable host fails fast, while the
+// wait for the first response header is given the full request timeout — the POS
+// 3.0 daemon can legitimately take tens of seconds to answer /rest/receipt while
+// it flushes its backlog to the gov host, and cutting that off early turns a
+// slow-but-real filing into a needless failure. NoRedirectPolicy on the client
+// surfaces a 3xx as a non-2xx error instead of silently following it (a redirect
+// on POST /rest/receipt is never something to follow).
+func newTransport(timeout time.Duration) *http.Transport {
 	return &http.Transport{
 		DialContext: (&net.Dialer{
 			Timeout:   10 * time.Second,
@@ -79,7 +82,7 @@ func newTransport() *http.Transport {
 		MaxConnsPerHost:       20,
 		IdleConnTimeout:       30 * time.Second,
 		TLSHandshakeTimeout:   10 * time.Second,
-		ResponseHeaderTimeout: 30 * time.Second,
+		ResponseHeaderTimeout: timeout,
 		ForceAttemptHTTP2:     true,
 	}
 }
