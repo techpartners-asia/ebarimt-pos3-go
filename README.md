@@ -7,6 +7,8 @@
 
 > Ebarimt POS 3.0 Golang Implementation SDK - A comprehensive Go library for integrating with the Ebarimt POS 3.0 system.
 
+> **v2 is available** (`github.com/techpartners-asia/ebarimt-pos3-go/v2`, in [`v2/`](v2/)): a rewrite from the PosAPI 3.0 docs with exact money, a pure receipt builder and strict errors. v1 below is unchanged. See [v2/MIGRATION.md](v2/MIGRATION.md).
+
 ## ✨ Features
 
 - 🚀 Complete POS 3.0 API implementation
